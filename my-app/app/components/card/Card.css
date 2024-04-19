@@ -1,0 +1,11 @@
+.card__back {
+  background-image: url(/public/card-back.jpg);
+  height: 150px;
+  width: 70px;
+}
+
+.card__front {
+  background-image: url(/public/card-sprite.jpg);
+  height: 150px;
+  width: 70px;
+}
