@@ -1,22 +1,29 @@
 "use client";
 
 import Card from "../card/Card";
-import { numTableaus } from "@/app/constants.mjs";
+import { numTableaus, cards } from "@/app/constants.mjs";
 
 export default function Tableau(props) {
-  const { tableauPiles = {}, tryAddingCardToBuildingPile } = props;
+  const { tableauPiles = {}, tryAddingCardToBuildingPile, buildingPiles } = props;
   const cardDoubleClickHandler = (event, cardProps) => {
-    console.log(' click event: ', cardProps);
-    const cardTableauPile = event.target.closest('[data-tableau-pile]').getAttribute('data-tableau-pile')
+    const { card } = cardProps;
+    if(tryAddingCardToBuildingPile(card, cards, buildingPiles)){
+      const cardTableauPile = event.target.closest('[data-tableau-pile]').getAttribute('data-tableau-pile')
+      const pileId = `tableauPile${cardTableauPile}`;
+      console.log('  -- - - - - - > tableau pile: ', tableauPiles[pileId].pile);
+      const newPile = tableauPiles[pileId].pile;
+      newPile.pop();
+      console.log('  -- - - - - - > newPile: ', newPile);
+      tableauPiles[pileId].update(newPile);
+    }
 
-    // if(tryAddingCardToBuildingPile(card)){}
   };
   return (
     <>
       {(() => {
         const elements = [];
         for (let i = 0; i <= numTableaus; i++) {
-          const cards = tableauPiles[i];
+          const cards = tableauPiles[`tableauPile${i}`].pile;
           elements.push(
             <div
               className="bg-slate-600 grow mx-2 p-4 justify-center"

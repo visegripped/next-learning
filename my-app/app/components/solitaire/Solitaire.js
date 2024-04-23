@@ -9,8 +9,6 @@ import Pile from "../pile/Pile";
 //solitaire anatomy: https://www.britannica.com/topic/solitaire-card-game
 //reducer tutorial: https://blog.logrocket.com/react-usereducer-hook-ultimate-guide/
 
-
-
 /*
 TODO:
 TableauPiles need to be managed w/ state, probably similar to how buildingPiles work.
@@ -28,15 +26,6 @@ export default function Solitaire(props) {
   const [spadePile, spadePileUpdate] = useState([]);
   const [diamondPile, diamondPileUpdate] = useState([]);
   const [clubPile, clubPileUpdate] = useState([]);
-  const [tableauPile0, tableauPile0Update] = useState(tableau[0]);
-  const [tableauPile1, tableauPile1Update] = useState(tableau[1]);
-  const [tableauPile2, tableauPile2Update] = useState(tableau[2]);
-  const [tableauPile3, tableauPile3Update] = useState(tableau[3]);
-  const [tableauPile4, tableauPile4Update] = useState(tableau[4]);
-  const [tableauPile5, tableauPile5Update] = useState(tableau[5]);
-  const [tableauPile6, tableauPile6Update] = useState(tableau[6]);
-
-
   const buildingPiles = {
     heart: {
       pile: heartPile,
@@ -56,15 +45,22 @@ export default function Solitaire(props) {
     },
   };
 
-const tableauPiles = {
-  0 : {pile: tableauPile0, update: tableauPile0Update},
-  1 : {pile: tableauPile1, update: tableauPile1Update},
-  2 : {pile: tableauPile2, update: tableauPile2Update},
-  3 : {pile: tableauPile3, update: tableauPile3Update},
-  4 : {pile: tableauPile4, update: tableauPile4Update},
-  5 : {pile: tableauPile5, update: tableauPile5Update},
-  6 : {pile: tableauPile6, update: tableauPile6Update},
-}
+  const [tableauPile0, tableauPile0Update] = useState(tableau[0]);
+  const [tableauPile1, tableauPile1Update] = useState(tableau[1]);
+  const [tableauPile2, tableauPile2Update] = useState(tableau[2]);
+  const [tableauPile3, tableauPile3Update] = useState(tableau[3]);
+  const [tableauPile4, tableauPile4Update] = useState(tableau[4]);
+  const [tableauPile5, tableauPile5Update] = useState(tableau[5]);
+  const [tableauPile6, tableauPile6Update] = useState(tableau[6]);
+  const tableauPiles = {
+    tableauPile0: { pile: tableauPile0, update: tableauPile0Update },
+    tableauPile1: { pile: tableauPile1, update: tableauPile1Update },
+    tableauPile2: { pile: tableauPile2, update: tableauPile2Update },
+    tableauPile3: { pile: tableauPile3, update: tableauPile3Update },
+    tableauPile4: { pile: tableauPile4, update: tableauPile4Update },
+    tableauPile5: { pile: tableauPile5, update: tableauPile5Update },
+    tableauPile6: { pile: tableauPile6, update: tableauPile6Update },
+  };
 
   const wasteReducer = (state, action) => {
     switch (action.type) {
@@ -114,7 +110,7 @@ const tableauPiles = {
   };
   const wasteDoubleClickHandler = () => {
     const topCard = waste[waste.length - 1];
-    if (tryAddingCardToBuildingPile(topCard, cards)) {
+    if (tryAddingCardToBuildingPile(topCard, cards, buildingPiles)) {
       updateWaste({
         card: topCard,
         type: "removeTopCard",
@@ -122,16 +118,16 @@ const tableauPiles = {
     }
   };
 
-  const tryAddingCardToBuildingPile = (card, buildingPile) => {
+  const tryAddingCardToBuildingPile = (card, cards, buildingPiles) => {
     const [newCardFace, suit] = card.split(":");
-    const newCardValue = buildingPile[newCardFace];
+    const newCardValue = cards[newCardFace];
     let topOfPileCardValue = 0;
     if (buildingPiles[suit] && buildingPiles[suit].pile.length) {
       const [topOfPileCardFace] =
         buildingPiles[suit].pile[buildingPiles[suit].pile.length - 1].split(
           ":"
         );
-      topOfPileCardValue = buildingPile[topOfPileCardFace];
+      topOfPileCardValue = cards[topOfPileCardFace];
     }
     if (newCardValue === topOfPileCardValue + 1) {
       buildingPiles[suit].update([...buildingPiles[suit].pile, card]);
@@ -167,7 +163,7 @@ const tableauPiles = {
                 key={`suits-${i}`}
               >
                 <h2>{suit}</h2>
-                <Pile cards={buildingPiles[suit].pile} />
+                <Pile cards={buildingPiles[suit].pile} areFacedUp='true' />
               </div>
             );
           }
@@ -189,7 +185,7 @@ const tableauPiles = {
       </section>
       <section className="mt-20 bg-slate-800 size-full flex">
         <Tableau
-          tableauPiles={tableau}
+          tableauPiles={tableauPiles}
           tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
           buildingPiles={buildingPiles}
         />
