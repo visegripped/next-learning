@@ -5,7 +5,12 @@ import { numTableaus } from "@/app/constants.mjs";
 
 export default function Tableau(props) {
   const { tableauPiles = {}, tryAddingCardToBuildingPile } = props;
-  const cardDoubleClickHandler = () => {};
+  const cardDoubleClickHandler = (event, cardProps) => {
+    console.log(' click event: ', cardProps);
+    const cardTableauPile = event.target.closest('[data-tableau-pile]').getAttribute('data-tableau-pile')
+
+    // if(tryAddingCardToBuildingPile(card)){}
+  };
   return (
     <>
       {(() => {
@@ -15,6 +20,7 @@ export default function Tableau(props) {
           elements.push(
             <div
               className="bg-slate-600 grow mx-2 p-4 justify-center"
+              data-tableau-pile={i}
               key={`tableau-${i}`}
             >
               <ul>
@@ -23,7 +29,7 @@ export default function Tableau(props) {
                     <Card
                       isFaceUp={index === cards.length - 1}
                       card={card}
-                      doubleClickHandler={cardDoubleClickHandler}
+                      doubleClickHandler={index === cards.length - 1 ? cardDoubleClickHandler : () => {}}
                     />
                   </li>
                 ))}

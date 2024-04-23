@@ -9,16 +9,33 @@ import Pile from "../pile/Pile";
 //solitaire anatomy: https://www.britannica.com/topic/solitaire-card-game
 //reducer tutorial: https://blog.logrocket.com/react-usereducer-hook-ultimate-guide/
 
+
+
+/*
+TODO:
+TableauPiles need to be managed w/ state, probably similar to how buildingPiles work.
+ - Tableau component will need this state based object passed in instead.
+ - want to manage each pile individually because otherwise updating state will be a nightmare.
+*/
+
 export default function Solitaire(props) {
   // console.log(` These are the props for home: `, props);
   // we can use localStorage to save games in progress.
   const fullDeck = buildDeck(suits, cards);
   const shuffledDeck = shuffleArray(fullDeck);
-  let tableauPiles = deal(shuffledDeck);
+  const tableau = deal(shuffledDeck);
   const [heartPile, heartPileUpdate] = useState([]);
   const [spadePile, spadePileUpdate] = useState([]);
   const [diamondPile, diamondPileUpdate] = useState([]);
   const [clubPile, clubPileUpdate] = useState([]);
+  const [tableauPile0, tableauPile0Update] = useState(tableau[0]);
+  const [tableauPile1, tableauPile1Update] = useState(tableau[1]);
+  const [tableauPile2, tableauPile2Update] = useState(tableau[2]);
+  const [tableauPile3, tableauPile3Update] = useState(tableau[3]);
+  const [tableauPile4, tableauPile4Update] = useState(tableau[4]);
+  const [tableauPile5, tableauPile5Update] = useState(tableau[5]);
+  const [tableauPile6, tableauPile6Update] = useState(tableau[6]);
+
 
   const buildingPiles = {
     heart: {
@@ -38,6 +55,16 @@ export default function Solitaire(props) {
       update: clubPileUpdate,
     },
   };
+
+const tableauPiles = {
+  0 : {pile: tableauPile0, update: tableauPile0Update},
+  1 : {pile: tableauPile1, update: tableauPile1Update},
+  2 : {pile: tableauPile2, update: tableauPile2Update},
+  3 : {pile: tableauPile3, update: tableauPile3Update},
+  4 : {pile: tableauPile4, update: tableauPile4Update},
+  5 : {pile: tableauPile5, update: tableauPile5Update},
+  6 : {pile: tableauPile6, update: tableauPile6Update},
+}
 
   const wasteReducer = (state, action) => {
     switch (action.type) {
@@ -95,16 +122,16 @@ export default function Solitaire(props) {
     }
   };
 
-  const tryAddingCardToBuildingPile = (card, cards) => {
+  const tryAddingCardToBuildingPile = (card, buildingPile) => {
     const [newCardFace, suit] = card.split(":");
-    const newCardValue = cards[newCardFace];
+    const newCardValue = buildingPile[newCardFace];
     let topOfPileCardValue = 0;
     if (buildingPiles[suit] && buildingPiles[suit].pile.length) {
       const [topOfPileCardFace] =
         buildingPiles[suit].pile[buildingPiles[suit].pile.length - 1].split(
           ":"
         );
-      topOfPileCardValue = cards[topOfPileCardFace];
+      topOfPileCardValue = buildingPile[topOfPileCardFace];
     }
     if (newCardValue === topOfPileCardValue + 1) {
       buildingPiles[suit].update([...buildingPiles[suit].pile, card]);
@@ -162,7 +189,7 @@ export default function Solitaire(props) {
       </section>
       <section className="mt-20 bg-slate-800 size-full flex">
         <Tableau
-          tableauPiles={tableauPiles}
+          tableauPiles={tableau}
           tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
           buildingPiles={buildingPiles}
         />

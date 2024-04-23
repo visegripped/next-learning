@@ -14,8 +14,11 @@ export default function Tableau(props) {
       console.log("no click handler defined");
     },
   } = props;
+  const doubleClickHandlerWrapper = (event, props) => {
+    doubleClickHandler(event, {card});
+  }
   return isFaceUp ? (
-    <div className={styles.card__front} onDoubleClick={doubleClickHandler}>
+    <div className={styles.card__front} onDoubleClick={doubleClickHandlerWrapper}>
       {card}
     </div>
   ) : (
