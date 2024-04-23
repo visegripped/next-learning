@@ -14,7 +14,7 @@ export default function Solitaire(props) {
   // we can use localStorage to save games in progress.
   const fullDeck = buildDeck(suits, cards);
   const shuffledDeck = shuffleArray(fullDeck);
-  let tableaus = deal(shuffledDeck);
+  let tableauPiles = deal(shuffledDeck);
   const [heartPile, heartPileUpdate] = useState([]);
   const [spadePile, spadePileUpdate] = useState([]);
   const [diamondPile, diamondPileUpdate] = useState([]);
@@ -87,30 +87,42 @@ export default function Solitaire(props) {
   };
   const wasteDoubleClickHandler = () => {
     const topCard = waste[waste.length - 1];
-    console.log(`Top card in waste: ${topCard}`);
-    tryAddingCardToBuildingPile(topCard);
+    if (tryAddingCardToBuildingPile(topCard, cards)) {
+      updateWaste({
+        card: topCard,
+        type: "removeTopCard",
+      });
+    }
   };
 
-  const tryAddingCardToBuildingPile = (card) => {
-    const [value, suit] = card.split(":");
-    console.log(`Try adding the ${value} of ${suit}s to their respective pile`);
-    if (buildingPiles[suit] && buildingPiles[suit].pile.length === 0 && value === 'ace') {
-      buildingPiles[suit].update([
-        ...buildingPiles[suit].pile,
-        card
-      ]);
-      updateWaste({
-        card,
-        type: 'removeTopCard'
-      });
-
-    } else if (buildingPiles[suit] && buildingPiles[suit].pile.length >= 1) {
-      // make sure cards are sequential
+  const tryAddingCardToBuildingPile = (card, cards) => {
+    const [newCardFace, suit] = card.split(":");
+    const newCardValue = cards[newCardFace];
+    let topOfPileCardValue = 0;
+    if (buildingPiles[suit] && buildingPiles[suit].pile.length) {
+      const [topOfPileCardFace] =
+        buildingPiles[suit].pile[buildingPiles[suit].pile.length - 1].split(
+          ":"
+        );
+      topOfPileCardValue = cards[topOfPileCardFace];
+    }
+    if (newCardValue === topOfPileCardValue + 1) {
+      buildingPiles[suit].update([...buildingPiles[suit].pile, card]);
+      return true;
     } else {
+      console.log(
+        `Try adding the ${newCardFace} of ${suit}s to their respective pile`
+      );
       // throw an error
-      console.log(`BuildingPiles[suit] is defined: ${!!buildingPiles[suit]}`)
-      console.log(`buildingPiles[suit].pile.length: ${buildingPiles[suit].pile.length}`)
-      console.log(`card value: ${value}`)
+      console.log(
+        ` -> BuildingPiles[suit] is defined: ${!!buildingPiles[
+          suit
+        ]} and length: ${buildingPiles[suit].pile.length}`
+      );
+      console.log(
+        `-> topOfPileCardValue: ${topOfPileCardValue} and newCardValue ${newCardValue}`
+      );
+      return false;
     }
   };
 
@@ -137,7 +149,11 @@ export default function Solitaire(props) {
         })()}
         {/* The waste */}
         <div className="bg-slate-600 grow mx-2 p-4 justify-center">
-          <Pile areFacedUp="true" cards={waste} doubleClickHandler={wasteDoubleClickHandler} />
+          <Pile
+            areFacedUp="true"
+            cards={waste}
+            doubleClickHandler={wasteDoubleClickHandler}
+          />
         </div>
         {/* The deck */}
         <div className="bg-slate-600 grow mx-2 p-4 justify-center">
@@ -145,22 +161,11 @@ export default function Solitaire(props) {
         </div>
       </section>
       <section className="mt-20 bg-slate-800 size-full flex">
-        {(() => {
-          const elements = [];
-
-          for (let i = 0; i <= numTableaus; i++) {
-            elements.push(
-              <div
-                className="bg-slate-600 grow mx-2 p-4 justify-center"
-                key={`tableau-${i}`}
-              >
-                <Tableau cards={tableaus[i]} />
-              </div>
-            );
-          }
-
-          return elements;
-        })()}
+        <Tableau
+          tableauPiles={tableauPiles}
+          tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
+          buildingPiles={buildingPiles}
+        />
       </section>
     </>
   );
