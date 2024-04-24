@@ -10,10 +10,8 @@ export default function Tableau(props) {
     if(tryAddingCardToBuildingPile(card, cards, buildingPiles)){
       const cardTableauPile = event.target.closest('[data-tableau-pile]').getAttribute('data-tableau-pile')
       const pileId = `tableauPile${cardTableauPile}`;
-      console.log('  -- - - - - - > tableau pile: ', tableauPiles[pileId].pile);
       const newPile = tableauPiles[pileId].pile;
       newPile.pop();
-      console.log('  -- - - - - - > newPile: ', newPile);
       tableauPiles[pileId].update(newPile);
     }
 
