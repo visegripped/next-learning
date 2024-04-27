@@ -2,11 +2,18 @@
 
 // import { suits, cards } from "../../constants.mjs";
 import Card from '../card/Card'
-
+import {useDroppable} from '@dnd-kit/core';
 export default function Pile(props) {
-  const { cards = [], areFacedUp, doubleClickHandler, clickHandler } = props;
+  const { cards = [], areFacedUp, doubleClickHandler, clickHandler, id = '', droppable = false} = props;
+  const {isOver, setNodeRef} = useDroppable({
+    id,
+  });
+  const dragOverStyle = {
+    backgroundColor: isOver ? 'green' : undefined,
+  };
+
   return (
-    <ol className="list-decimal list-inside">
+    <ol className="list-decimal list-inside border p-4" style={dragOverStyle} ref={droppable ? setNodeRef : () => {}}>
       {(() => {
         const elements = [];
         for (let i = 0; i < cards.length; i++) {

@@ -3,7 +3,8 @@ import { useReducer, useState } from "react";
 import { numTableaus, suits, cards } from "../../constants.mjs";
 import { shuffleArray, buildDeck, deal } from "../../cardUtilities.mjs";
 import Tableau from "../tableau/Tableau";
-import Card from "../card/Card";
+import {DndContext} from '@dnd-kit/core';
+
 import Pile from "../pile/Pile";
 
 //solitaire anatomy: https://www.britannica.com/topic/solitaire-card-game
@@ -149,21 +150,42 @@ export default function Solitaire(props) {
     }
   };
 
+  const handleDragEnd = (event) => {
+
+    if (event.over && event.over.id.indexOf('buildPile') === 0) {
+      // setIsDropped(true);
+      console.log('Got to dragEnd w/ matching buildPile ID', event);
+      const card = event.active.id;
+      if(tryAddingCardToBuildingPile(card, cards, buildingPiles)) {
+        //determine if originating pile was waste or a tableau pile.
+
+        const cardTableauPile = event.activatorEvent.target.closest('[data-tableau-pile]').getAttribute('data-tableau-pile')
+        const pileId = `tableauPile${cardTableauPile}`;
+        const newPile = tableauPiles[pileId].pile;
+        newPile.pop();
+        tableauPiles[pileId].update(newPile);
+      }
+      
+    } else {
+      console.log(`Got to dragEnd w/out matching ID (${event.over.id})`, event)
+    }
+  }
+
   return (
-    <>
+    <DndContext onDragEnd={handleDragEnd}>
       <section className="mt-20 bg-slate-800 size-full flex">
-        {/* Building piles */}
+        {/* Building piles - todo: componetize this */}
         {(() => {
           const elements = [];
           for (let i = 0; i < suits.length; i++) {
             const suit = suits[i];
             elements.push(
               <div
-                className="bg-slate-600 grow mx-2 p-4 justify-center"
+                className="bg-slate-600 grow mx-2 justify-center"
                 key={`suits-${i}`}
               >
                 <h2>{suit}</h2>
-                <Pile cards={buildingPiles[suit].pile} areFacedUp='true' />
+                <Pile cards={buildingPiles[suit].pile} areFacedUp='true' id={`buildPile-${suit}`} droppable='true' />
               </div>
             );
           }
@@ -171,16 +193,17 @@ export default function Solitaire(props) {
           return elements;
         })()}
         {/* The waste */}
-        <div className="bg-slate-600 grow mx-2 p-4 justify-center">
+        <div className="bg-slate-600 grow mx-2 justify-center">
           <Pile
             areFacedUp="true"
             cards={waste}
             doubleClickHandler={wasteDoubleClickHandler}
+            id='wastePile'
           />
         </div>
         {/* The deck */}
-        <div className="bg-slate-600 grow mx-2 p-4 justify-center">
-          <Pile cards={deck} clickHandler={deckClickHandler} />
+        <div className="bg-slate-600 grow mx-2 justify-center">
+          <Pile cards={deck} clickHandler={deckClickHandler} id='deckPile' />
         </div>
       </section>
       <section className="mt-20 bg-slate-800 size-full flex">
@@ -190,6 +213,6 @@ export default function Solitaire(props) {
           buildingPiles={buildingPiles}
         />
       </section>
-    </>
+    </DndContext>
   );
 }

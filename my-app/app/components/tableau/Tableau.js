@@ -1,5 +1,6 @@
 "use client";
 
+
 import Card from "../card/Card";
 import { numTableaus, cards } from "@/app/constants.mjs";
 
@@ -27,6 +28,7 @@ export default function Tableau(props) {
               className="bg-slate-600 grow mx-2 p-4 justify-center"
               data-tableau-pile={i}
               key={`tableau-${i}`}
+              id={`tableauPile-${i}`}
             >
               <ul>
                 {cards.map((card, index) => (
