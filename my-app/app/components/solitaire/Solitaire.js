@@ -1,7 +1,7 @@
 "use client";
 import { useReducer, useState } from "react";
-import { numTableaus, suits, cards } from "../../constants.mjs";
-import { shuffleArray, buildDeck, deal } from "../../cardUtilities.mjs";
+import { suits, cards } from "../../constants.mjs";
+import { shuffleArray, buildDeck, deal, isCardRed } from "../../cardUtilities.mjs";
 import Tableau from "../tableau/Tableau";
 import { DndContext } from "@dnd-kit/core";
 
@@ -9,13 +9,6 @@ import Pile from "../pile/Pile";
 
 //solitaire anatomy: https://www.britannica.com/topic/solitaire-card-game
 //reducer tutorial: https://blog.logrocket.com/react-usereducer-hook-ultimate-guide/
-
-/*
-TODO:
-TableauPiles need to be managed w/ state, probably similar to how buildingPiles work.
- - Tableau component will need this state based object passed in instead.
- - want to manage each pile individually because otherwise updating state will be a nightmare.
-*/
 
 export default function Solitaire(props) {
   // console.log(` These are the props for home: `, props);
@@ -150,6 +143,35 @@ export default function Solitaire(props) {
     }
   };
 
+  const tryAddingCardToTableauPile = (newCard, cards, targetPileId, tableauPileFromState) => {
+    const [newCardFace, suit] = newCard.split(":");
+    const newCardValue = cards[newCardFace];
+    const targetPileStateId = targetPileId.replace('-','');
+    const topCardInTargetPile = tableauPileFromState[tableauPileFromState.length - 1];
+    const [topCardInTargetPileFace, topCardInTargetPileSuit] = topCardInTargetPile.split(":");
+    const topCardInTargetPileValue = cards[topCardInTargetPileFace]
+
+    console.log(`Attempting to move a card into a tableau pile
+    card: ${card}
+    card value: ${cardValue}
+    targetPileStateId: ${targetPileStateId}
+    topCardInTargetPile: ${topCardInTargetPile}
+    topCardInTargetPileValue: ${topCardInTargetPileValue}
+    `
+    )
+
+    // if the new card value is not exactly one less, disallow.
+    // if the new card suit isn't opposing color for previous card, disallow.
+    // if the pile is empty, card must be a king.
+    if(topCardInTargetPileValue - newCardValue != 1) {
+      console.log('New card and top pile card are not sequential.')
+      return false;
+    } else if(isCardRed(newCard) === isCardRed(topCardInTargetPile)) {
+      console.log('New card and top pile card are the same color.')
+      return false;
+    }
+  }
+
   const handleDragEnd = (event) => {
     const originatingPile = event.activatorEvent.target
       .closest("ol")
@@ -164,15 +186,16 @@ export default function Solitaire(props) {
       targetPileType: ${targetPileType}
       OriginatingPile: ${originatingPile}
       OriginatingPileType: ${originatingPileType}
-      Card: ${card}/n`,
+      Card: ${card}
+      `,
       event
     );
-    // This only works if coming from a Tableau. We need to know the source
     if (
       targetPileType === "buildPile" &&
       originatingPileType === "tableauPile" &&
       tryAddingCardToBuildingPile(card, cards, buildingPiles)
     ) {
+      // todo: this is duplicated in Tableau double click handler. share it.
       const pileIdInState = originatingPile.replace('-','');
       const newPile = tableauPiles[pileIdInState].pile;
       newPile.pop();
