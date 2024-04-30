@@ -24,12 +24,12 @@ export default function Tableau(props) {
           const cards = tableauPiles[`tableauPile${i}`].pile;
           elements.push(
             <div
-              className="bg-slate-600 grow mx-2 p-4 justify-center"
+              className="bg-slate-600 grow mx-2 justify-center"
               data-tableau-pile={i}
               key={`tableau-${i}`}
               id={`tableauPile-${i}`}
             >
-              <Pile cards={cards} doubleClickHandler={cardDoubleClickHandler} cardFaceBehavior='showLastCard' />
+              <Pile cards={cards} doubleClickHandler={cardDoubleClickHandler} cardFaceBehavior='showLastCard' id={`tableauPile-${i}`} />
             </div>
           );
         }

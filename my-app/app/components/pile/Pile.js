@@ -34,6 +34,7 @@ export default function Pile(props) {
       className="list-decimal list-inside border p-4"
       style={dragOverStyle}
       ref={droppable ? setNodeRef : () => {}}
+      data-pile={id}
     >
       {(() => {
         const elements = [];

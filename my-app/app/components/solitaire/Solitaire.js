@@ -3,7 +3,7 @@ import { useReducer, useState } from "react";
 import { numTableaus, suits, cards } from "../../constants.mjs";
 import { shuffleArray, buildDeck, deal } from "../../cardUtilities.mjs";
 import Tableau from "../tableau/Tableau";
-import {DndContext} from '@dnd-kit/core';
+import { DndContext } from "@dnd-kit/core";
 
 import Pile from "../pile/Pile";
 
@@ -151,25 +151,44 @@ export default function Solitaire(props) {
   };
 
   const handleDragEnd = (event) => {
-
-    if (event.over && event.over?.id?.indexOf('buildPile') === 0) {
-      // setIsDropped(true);
-      console.log('Got to dragEnd w/ matching buildPile ID', event);
-      const card = event.active.id;
-      if(tryAddingCardToBuildingPile(card, cards, buildingPiles)) {
+    const originatingPile = event.activatorEvent.target
+      .closest("ol")
+      .getAttribute("data-pile");
+    const [originatingPileType] = originatingPile.split("-");
+    const targetPile = event.over?.id;
+    const [targetPileType] = targetPile.split("-");
+    const card = event.active.id;
+    console.log(
+      `Got to dragEnd:
+      TargetPile: ${targetPile}
+      targetPileType: ${targetPileType}
+      OriginatingPile: ${originatingPile}
+      OriginatingPileType: ${originatingPileType}
+      Card: ${card}/n`,
+      event
+    );
+    // This only works if coming from a Tableau. We need to know the source
+    if (
+      targetPileType === "buildPile" &&
+      originatingPileType === "tableauPile"
+    ) {
+      if (tryAddingCardToBuildingPile(card, cards, buildingPiles)) {
         //determine if originating pile was waste or a tableau pile.
-
-        const cardTableauPile = event.activatorEvent.target.closest('[data-tableau-pile]').getAttribute('data-tableau-pile')
+        const cardTableauPile = event.activatorEvent.target
+          .closest("[data-tableau-pile]")
+          .getAttribute("data-tableau-pile");
         const pileId = `tableauPile${cardTableauPile}`;
         const newPile = tableauPiles[pileId].pile;
         newPile.pop();
         tableauPiles[pileId].update(newPile);
       }
-      
     } else {
-      console.log(`Got to dragEnd w/out matching ID (${event.over?.id})`, event)
+      console.log(
+        `Got to dragEnd w/out matching ID (${event.over?.id})`,
+        event
+      );
     }
-  }
+  };
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
@@ -185,7 +204,12 @@ export default function Solitaire(props) {
                 key={`suits-${i}`}
               >
                 <h2>{suit}</h2>
-                <Pile cards={buildingPiles[suit].pile} cardFaceBehavior='up' id={`buildPile-${suit}`} droppable='true' />
+                <Pile
+                  cards={buildingPiles[suit].pile}
+                  cardFaceBehavior="up"
+                  id={`buildPile-${suit}`}
+                  droppable="true"
+                />
               </div>
             );
           }
@@ -195,15 +219,20 @@ export default function Solitaire(props) {
         {/* The waste */}
         <div className="bg-slate-600 grow mx-2 justify-center">
           <Pile
-            cardFaceBehavior='up'
+            cardFaceBehavior="up"
             cards={waste}
             doubleClickHandler={wasteDoubleClickHandler}
-            id='wastePile'
+            id="wastePile"
           />
         </div>
         {/* The deck */}
         <div className="bg-slate-600 grow mx-2 justify-center">
-          <Pile cards={deck} clickHandler={deckClickHandler} id='deckPile' cardFaceBehavior='down' />
+          <Pile
+            cards={deck}
+            clickHandler={deckClickHandler}
+            id="deckPile"
+            cardFaceBehavior="down"
+          />
         </div>
       </section>
       <section className="mt-20 bg-slate-800 size-full flex">
