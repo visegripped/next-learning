@@ -152,7 +152,7 @@ export default function Solitaire(props) {
 
   const handleDragEnd = (event) => {
 
-    if (event.over && event.over.id.indexOf('buildPile') === 0) {
+    if (event.over && event.over?.id?.indexOf('buildPile') === 0) {
       // setIsDropped(true);
       console.log('Got to dragEnd w/ matching buildPile ID', event);
       const card = event.active.id;
@@ -167,7 +167,7 @@ export default function Solitaire(props) {
       }
       
     } else {
-      console.log(`Got to dragEnd w/out matching ID (${event.over.id})`, event)
+      console.log(`Got to dragEnd w/out matching ID (${event.over?.id})`, event)
     }
   }
 
@@ -185,7 +185,7 @@ export default function Solitaire(props) {
                 key={`suits-${i}`}
               >
                 <h2>{suit}</h2>
-                <Pile cards={buildingPiles[suit].pile} areFacedUp='true' id={`buildPile-${suit}`} droppable='true' />
+                <Pile cards={buildingPiles[suit].pile} cardFaceBehavior='up' id={`buildPile-${suit}`} droppable='true' />
               </div>
             );
           }
@@ -195,7 +195,7 @@ export default function Solitaire(props) {
         {/* The waste */}
         <div className="bg-slate-600 grow mx-2 justify-center">
           <Pile
-            areFacedUp="true"
+            cardFaceBehavior='up'
             cards={waste}
             doubleClickHandler={wasteDoubleClickHandler}
             id='wastePile'
@@ -203,7 +203,7 @@ export default function Solitaire(props) {
         </div>
         {/* The deck */}
         <div className="bg-slate-600 grow mx-2 justify-center">
-          <Pile cards={deck} clickHandler={deckClickHandler} id='deckPile' />
+          <Pile cards={deck} clickHandler={deckClickHandler} id='deckPile' cardFaceBehavior='down' />
         </div>
       </section>
       <section className="mt-20 bg-slate-800 size-full flex">

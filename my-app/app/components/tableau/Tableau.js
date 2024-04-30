@@ -1,7 +1,6 @@
 "use client";
 
-
-import Card from "../card/Card";
+import Pile from "../pile/Pile";
 import { numTableaus, cards } from "@/app/constants.mjs";
 
 export default function Tableau(props) {
@@ -30,17 +29,7 @@ export default function Tableau(props) {
               key={`tableau-${i}`}
               id={`tableauPile-${i}`}
             >
-              <ul>
-                {cards.map((card, index) => (
-                  <li key={card}>
-                    <Card
-                      isFaceUp={index === cards.length - 1}
-                      card={card}
-                      doubleClickHandler={index === cards.length - 1 ? cardDoubleClickHandler : () => {}}
-                    />
-                  </li>
-                ))}
-              </ul>
+              <Pile cards={cards} doubleClickHandler={cardDoubleClickHandler} cardFaceBehavior='showLastCard' />
             </div>
           );
         }
