@@ -170,22 +170,26 @@ export default function Solitaire(props) {
     // This only works if coming from a Tableau. We need to know the source
     if (
       targetPileType === "buildPile" &&
-      originatingPileType === "tableauPile"
+      originatingPileType === "tableauPile" &&
+      tryAddingCardToBuildingPile(card, cards, buildingPiles)
     ) {
-      if (tryAddingCardToBuildingPile(card, cards, buildingPiles)) {
-        //determine if originating pile was waste or a tableau pile.
-        const cardTableauPile = event.activatorEvent.target
-          .closest("[data-tableau-pile]")
-          .getAttribute("data-tableau-pile");
-        const pileId = `tableauPile${cardTableauPile}`;
-        const newPile = tableauPiles[pileId].pile;
-        newPile.pop();
-        tableauPiles[pileId].update(newPile);
-      }
+      const pileIdInState = originatingPile.replace('-','');
+      const newPile = tableauPiles[pileIdInState].pile;
+      newPile.pop();
+      tableauPiles[pileId].update(newPile);
+    } else if (
+      targetPileType === "buildPile" &&
+      originatingPileType === "wastePile" &&
+      tryAddingCardToBuildingPile(card, cards, buildingPiles)
+    ) {
+      const topCard = waste[waste.length - 1];
+        updateWaste({
+          card: topCard,
+          type: "removeTopCard",
+        });
     } else {
       console.log(
-        `Got to dragEnd w/out matching ID (${event.over?.id})`,
-        event
+        `Got to dragEnd w/out matching any conditionals`
       );
     }
   };
