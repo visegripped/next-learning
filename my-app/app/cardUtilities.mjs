@@ -33,7 +33,7 @@ export const deal = (shuffledDeck) => {
   const numTableaus = 6;
   const tableaus = {};
   let numPops = 1;
-  for (let i = 0; i <= numTableaus; i++ ) {
+  for (let i = 0; i <= numTableaus; i++) {
     tableaus[i] = [];
     for (let ipop = 0; ipop < numPops; ipop++) {
       tableaus[i].push(shuffledDeck.pop());

@@ -1,23 +1,17 @@
-import Image from "next/image";
-
-// import DealButton from './components/DealButton';
+// import Image from "next/image";
 import Solitaire from './components/solitaire/Solitaire';
 
-
-
-export default function Home(props) {
+export default function Home() {
   
   return (
-    <main className=" p-24">
+    <main className=" p-8">
       <div className='md:hidden'>thank you for your interest, but this version of solitaire is only available at tablet+</div>
       <div className="hidden md:block">
         <section className='flex'>
           <h1 className='grow'>Welcome to Solitaire</h1>
           {/* <div className='flex-none'><DealButton /></div> */}
         </section>
-        page props: {Object.keys(props)}
-        <Solitaire ssrProps={props} />
-
+        <Solitaire />
 
         {/* <a
           href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"

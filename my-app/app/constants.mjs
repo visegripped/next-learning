@@ -14,5 +14,3 @@ export const cards = {
   queen: 12,
   king: 13,
 };
-
-export const numTableaus = 6;

@@ -1,7 +1,7 @@
 "use client";
 
 // import { suits, cards } from "../../constants.mjs";
-import Card from "../card/Card";
+import Card from "@/app/components/card/Card";
 import { useDroppable } from "@dnd-kit/core";
 
 export const showCardFace = (behavior, isLastCard) => {
@@ -16,7 +16,7 @@ export const showCardFace = (behavior, isLastCard) => {
 export default function Pile(props) {
   const {
     cards = [],
-     doubleClickHandler,
+    doubleClickHandler,
     clickHandler,
     id = "",
     droppable = false,
@@ -39,7 +39,10 @@ export default function Pile(props) {
       {(() => {
         const elements = [];
         for (let i = 0; i < cards.length; i++) {
-        const CardisFaceUp = showCardFace(cardFaceBehavior, (i === cards.length - 1));
+          const CardisFaceUp = showCardFace(
+            cardFaceBehavior,
+            i === cards.length - 1
+          );
           const singleClick =
             i === cards.length - 1 && typeof clickHandler === "function"
               ? clickHandler
