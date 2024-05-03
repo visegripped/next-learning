@@ -29,14 +29,19 @@ export const shuffleArray = (array) => {
   return array;
 };
 
-export const deal = (shuffledDeck) => {
+
+export const buildTableau = (shuffledDeck) => {
   const numTableaus = 6;
   const tableaus = {};
   let numPops = 1;
   for (let i = 0; i <= numTableaus; i++) {
-    tableaus[i] = [];
+    tableaus[`tableau_${i}`] = [];
     for (let ipop = 0; ipop < numPops; ipop++) {
-      tableaus[i].push(shuffledDeck.pop());
+      tableaus[`tableau_${i}`].push({
+        card: shuffledDeck.pop(),
+        visible: (ipop === numPops - 1),
+        draggable: (ipop === numPops - 1),
+      });
     }
     numPops += 1;
   }

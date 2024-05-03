@@ -1,107 +1,142 @@
 "use client";
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import { suits, cards } from "@/app/constants.mjs";
 import {
   shuffleArray,
   buildDeck,
-  deal,
+  buildTableau,
   isCardRed,
 } from "@/app/cardUtilities.mjs";
 import Tableau from "@/app/components/tableau/Tableau";
-import { DndContext } from "@dnd-kit/core";
 import Pile from "@/app/components/pile/Pile";
+import solitaireReducer from "@/app/reducers/solitaire.reducer";
+import SolitaireContext from "@/app/context/Solitaire.context";
+import { DndContext } from "@dnd-kit/core";
 
 //solitaire anatomy: https://www.britannica.com/topic/solitaire-card-game
 //reducer tutorial: https://blog.logrocket.com/react-usereducer-hook-ultimate-guide/
+// context/reducer: https://stackoverflow.com/questions/63687178/sharing-states-between-two-components-with-usereducer
 
 export default function Solitaire(props) {
   // console.log(` These are the props for home: `, props);
   // we can use localStorage to save games in progress.
   const fullDeck = buildDeck(suits, cards);
   const shuffledDeck = shuffleArray(fullDeck);
-  const tableau = deal(shuffledDeck);
-  const [heartPile, heartPileUpdate] = useState([]);
-  const [spadePile, spadePileUpdate] = useState([]);
-  const [diamondPile, diamondPileUpdate] = useState([]);
-  const [clubPile, clubPileUpdate] = useState([]);
-  const buildingPiles = {
-    heart: {
-      pile: heartPile,
-      update: heartPileUpdate,
-    },
-    spade: {
-      pile: spadePile,
-      update: spadePileUpdate,
-    },
-    diamond: {
-      pile: diamondPile,
-      update: diamondPileUpdate,
-    },
-    club: {
-      pile: clubPile,
-      update: clubPileUpdate,
-    },
+  const {
+    tableau_0,
+    tableau_1,
+    tableau_2,
+    tableau_3,
+    tableau_4,
+    tableau_5,
+    tableau_6,
+  } = buildTableau(shuffledDeck);
+
+  const [pilesState, pilesDispatch] = useReducer(solitaireReducer, {
+    deck: shuffledDeck,
+    waste: [],
+    tableau_0: tableau_0,
+    tableau_1: tableau_1,
+    tableau_2: tableau_2,
+    tableau_3: tableau_3,
+    tableau_4: tableau_4,
+    tableau_5: tableau_5,
+    tableau_6: tableau_6,
+    build_heart: [],
+    build_spade: [],
+    build_diamond: [],
+    build_club: [],
+  });
+
+  const providerState = {
+    state: pilesState,
+    dispatch: pilesDispatch,
   };
 
-  const [tableauPile0, tableauPile0Update] = useState(tableau[0]);
-  const [tableauPile1, tableauPile1Update] = useState(tableau[1]);
-  const [tableauPile2, tableauPile2Update] = useState(tableau[2]);
-  const [tableauPile3, tableauPile3Update] = useState(tableau[3]);
-  const [tableauPile4, tableauPile4Update] = useState(tableau[4]);
-  const [tableauPile5, tableauPile5Update] = useState(tableau[5]);
-  const [tableauPile6, tableauPile6Update] = useState(tableau[6]);
-  const tableauPiles = {
-    tableauPile0: { pile: tableauPile0, update: tableauPile0Update },
-    tableauPile1: { pile: tableauPile1, update: tableauPile1Update },
-    tableauPile2: { pile: tableauPile2, update: tableauPile2Update },
-    tableauPile3: { pile: tableauPile3, update: tableauPile3Update },
-    tableauPile4: { pile: tableauPile4, update: tableauPile4Update },
-    tableauPile5: { pile: tableauPile5, update: tableauPile5Update },
-    tableauPile6: { pile: tableauPile6, update: tableauPile6Update },
-  };
+  console.log(" -> Piles state: ", pilesState);
 
-  const wasteReducer = (state, action) => {
-    switch (action.type) {
-      case "addCard": {
-        if (state.includes(action.card)) {
-          return state;
-        }
-        return [...state, action.card];
-      }
-      case "removeTopCard": {
-        if (state.includes(action.card)) {
-          return state.pop();
-        }
-        return state;
-      }
-      case "moveWasteToDeck": {
-        // this needs to move all cards back to the deck and preserve the order.
-        return [];
-      }
-      default:
-        throw new Error();
-    }
-  };
-  const [waste, updateWaste] = useReducer(wasteReducer, []);
+  // const [heartPile, heartPileUpdate] = useState([]);
+  // const [spadePile, spadePileUpdate] = useState([]);
+  // const [diamondPile, diamondPileUpdate] = useState([]);
+  // const [clubPile, clubPileUpdate] = useState([]);
+  // const buildingPiles = {
+  //   heart: {
+  //     pile: heartPile,
+  //     update: heartPileUpdate,
+  //   },
+  //   spade: {
+  //     pile: spadePile,
+  //     update: spadePileUpdate,
+  //   },
+  //   diamond: {
+  //     pile: diamondPile,
+  //     update: diamondPileUpdate,
+  //   },
+  //   club: {
+  //     pile: clubPile,
+  //     update: clubPileUpdate,
+  //   },
+  // };
 
-  const deckReducer = (state = shuffledDeck, action) => {
-    switch (action.type) {
-      case "addCardToWaste": {
-        // this needs to pop a card off of the deck reducer and add it to the waste
-        const newState = [...state];
-        const flippedCard = newState.pop();
-        updateWaste({ type: "addCard", card: flippedCard });
-        return newState;
-      }
-      case "resetDeck": {
-        // this needs to move all cards back to the shuffled deck
-        return [];
-      }
-      default:
-        throw new Error();
-    }
-  };
-  const [deck, updateDeck] = useReducer(deckReducer, shuffledDeck);
+  // const [tableauPile0, tableauPile0Update] = useState(tableau[0]);
+  // const [tableauPile1, tableauPile1Update] = useState(tableau[1]);
+  // const [tableauPile2, tableauPile2Update] = useState(tableau[2]);
+  // const [tableauPile3, tableauPile3Update] = useState(tableau[3]);
+  // const [tableauPile4, tableauPile4Update] = useState(tableau[4]);
+  // const [tableauPile5, tableauPile5Update] = useState(tableau[5]);
+  // const [tableauPile6, tableauPile6Update] = useState(tableau[6]);
+  // const tableauPiles = {
+  //   tableauPile0: { pile: tableauPile0, update: tableauPile0Update },
+  //   tableauPile1: { pile: tableauPile1, update: tableauPile1Update },
+  //   tableauPile2: { pile: tableauPile2, update: tableauPile2Update },
+  //   tableauPile3: { pile: tableauPile3, update: tableauPile3Update },
+  //   tableauPile4: { pile: tableauPile4, update: tableauPile4Update },
+  //   tableauPile5: { pile: tableauPile5, update: tableauPile5Update },
+  //   tableauPile6: { pile: tableauPile6, update: tableauPile6Update },
+  // };
+
+  // const wasteReducer = (state, action) => {
+  //   switch (action.type) {
+  //     case "addCard": {
+  //       if (state.includes(action.card)) {
+  //         return state;
+  //       }
+  //       return [...state, action.card];
+  //     }
+  //     case "removeTopCard": {
+  //       if (state.includes(action.card)) {
+  //         return state.pop();
+  //       }
+  //       return state;
+  //     }
+  //     case "moveWasteToDeck": {
+  //       // this needs to move all cards back to the deck and preserve the order.
+  //       return [];
+  //     }
+  //     default:
+  //       throw new Error();
+  //   }
+  // };
+  // const [waste, updateWaste] = useReducer(wasteReducer, []);
+
+  // const deckReducer = (state = shuffledDeck, action) => {
+  //   switch (action.type) {
+  //     case "addCardToWaste": {
+  //       // this needs to pop a card off of the deck reducer and add it to the waste
+  //       const newState = [...state];
+  //       const flippedCard = newState.pop();
+  //       updateWaste({ type: "addCard", card: flippedCard });
+  //       return newState;
+  //     }
+  //     case "resetDeck": {
+  //       // this needs to move all cards back to the shuffled deck
+  //       return [];
+  //     }
+  //     default:
+  //       throw new Error();
+  //   }
+  // };
+  // const [deck, updateDeck] = useReducer(deckReducer, shuffledDeck);
 
   const deckClickHandler = () => {
     updateDeck({ type: "addCardToWaste" });
@@ -226,57 +261,57 @@ export default function Solitaire(props) {
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <section className="mt-20 bg-slate-800 size-full flex">
-        {/* Building piles - todo: componetize this */}
-        {(() => {
-          const elements = [];
-          for (let i = 0; i < suits.length; i++) {
-            const suit = suits[i];
-            elements.push(
-              <div
-                className="bg-slate-600 grow mx-2 justify-center"
-                key={`suits-${i}`}
-              >
-                <h2>{suit}</h2>
-                <Pile
-                  cards={buildingPiles[suit].pile}
-                  cardFaceBehavior="up"
-                  id={`buildPile-${suit}`}
-                  droppable="true"
-                />
-              </div>
-            );
-          }
+    <SolitaireContext.Provider value={providerState}>
+      <DndContext onDragEnd={handleDragEnd}>
+        <section className="mt-20 bg-slate-800 size-full flex">
+          {/* Building piles - todo: componetize this */}
+          {(() => {
+            const elements = [];
+            for (let i = 0; i < suits.length; i++) {
+              const suit = suits[i];
+              elements.push(
+                <div
+                  className="bg-slate-600 grow mx-2 justify-center"
+                  key={`suits-${i}`}
+                >
+                  <h2>{suit}</h2>
+                  <Pile
+                    cards={pilesState[`build_${suit}`]}
+                    id={`build_${suit}`}
+                    droppable="true"
+                  />
+                </div>
+              );
+            }
 
-          return elements;
-        })()}
-        {/* The waste */}
-        <div className="bg-slate-600 grow mx-2 justify-center">
+            return elements;
+          })()}
+          {/* The waste */}
+          {/* <div className="bg-slate-600 grow mx-2 justify-center">
           <Pile
-            cardFaceBehavior="up"
-            cards={waste}
+            cards={pilesState.waste}
             doubleClickHandler={wasteDoubleClickHandler}
             id="wastePile"
           />
-        </div>
-        {/* The deck */}
-        <div className="bg-slate-600 grow mx-2 justify-center">
+        </div> */}
+          {/* The deck */}
+          {/* <div className="bg-slate-600 grow mx-2 justify-center">
           <Pile
-            cards={deck}
+            cards={pilesState.deck}
             clickHandler={deckClickHandler}
             id="deckPile"
             cardFaceBehavior="down"
           />
-        </div>
-      </section>
-      <section className="mt-20 bg-slate-800 size-full flex">
+        </div> */}
+        </section>
+        {/* <section className="mt-20 bg-slate-800 size-full flex">
         <Tableau
-          tableauPiles={tableauPiles}
+          tableauPiles={pilesState}
           tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
           buildingPiles={buildingPiles}
         />
-      </section>
-    </DndContext>
+      </section> */}
+      </DndContext>
+    </SolitaireContext.Provider>
   );
 }
