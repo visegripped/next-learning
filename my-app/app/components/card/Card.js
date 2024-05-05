@@ -25,15 +25,11 @@ export default function Tableau(props) {
       }
     : undefined;
 
-  const doubleClickHandlerWrapper = (event, props) => {
-    doubleClickHandler(event, { card });
-  };
-
   return isFaceUp ? (
     <div
       className={styles.card__front}
       data-source={source}
-      onDoubleClick={doubleClickHandlerWrapper}
+      onDoubleClick={(e) => {doubleClickHandler(e, card)}}
       style={draggableStyle}
       ref={setNodeRef}
       {...listeners}
@@ -42,7 +38,7 @@ export default function Tableau(props) {
       {card}
     </div>
   ) : (
-    <div className={styles.card__back} onClick={clickHandler}>
+    <div className={styles.card__back} onClick={(e) => {clickHandler(e, card)}}>
       Card back {card}
     </div>
   );

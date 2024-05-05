@@ -4,23 +4,13 @@
 import Card from "@/app/components/card/Card";
 import { useDroppable } from "@dnd-kit/core";
 
-export const showCardFace = (behavior, isLastCard) => {
-  if (behavior === "showLastCard" && isLastCard) {
-    return true;
-  } else if (behavior === "up") {
-    return true;
-  }
-  return false;
-};
-
 export default function Pile(props) {
   const {
-    cards = [],
-    doubleClickHandler,
-    clickHandler,
+    cards = {},
+    doubleClickHandlerForLastCard,
+    clickHandlerForLastCard,
     id = "",
     droppable = false,
-    cardFaceBehavior = "down",
   } = props;
   const { isOver, setNodeRef } = useDroppable({
     id,
@@ -28,7 +18,6 @@ export default function Pile(props) {
   const dragOverStyle = {
     backgroundColor: isOver ? "green" : undefined,
   };
-
   return (
     <ol
       className="list-decimal list-inside border p-4"
@@ -38,28 +27,18 @@ export default function Pile(props) {
     >
       {(() => {
         const elements = [];
-        for (let i = 0; i < cards.length; i++) {
-          const CardisFaceUp = showCardFace(
-            cardFaceBehavior,
-            i === cards.length - 1
-          );
-          const singleClick =
-            i === cards.length - 1 && typeof clickHandler === "function"
-              ? clickHandler
-              : () => {
-                  console.log("Pile: no click handler defined");
-                };
-          const doubleClick =
-            i === cards.length - 1 && typeof doubleClickHandler === "function"
-              ? doubleClickHandler
-              : () => {};
+        const sequence = cards.sequence || [];
+        for (let i = 0; i < sequence.length; i++) {
+          const card = sequence[i];
+          const { isFaceUp, isDraggable } = cards.meta[card];
           elements.push(
             <li key={`cards-${i}`}>
               <Card
-                isFaceUp={CardisFaceUp}
-                card={cards[i]}
-                clickHandler={singleClick}
-                doubleClickHandler={doubleClick}
+                isFaceUp={isFaceUp}
+                card={card}
+                clickHandler={clickHandlerForLastCard && i === sequence.length - 1 ? clickHandlerForLastCard : undefined}
+                doubleClickHandler={doubleClickHandlerForLastCard && i === sequence.length - 1 ? doubleClickHandlerForLastCard : undefined}
+                isDraggable={isDraggable}
               />
             </li>
           );

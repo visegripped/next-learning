@@ -1,4 +1,4 @@
-export const buildDeck = (suits, cards) => {
+export const buildFullDeck = (suits, cards) => {
   const deck = [];
   suits.forEach((suit) => {
     const cardKeys = Object.keys(cards);
@@ -29,19 +29,37 @@ export const shuffleArray = (array) => {
   return array;
 };
 
+export const buildDeck = (fullDeck = []) => {
+  const data = {
+    sequence: [],
+    meta: {}
+  };
+  fullDeck.forEach((card) => {
+    data.sequence.push(card);
+    data.meta[card] = {
+      isFaceUp : false,
+      isVisible: false,
+    }
+  });
+  return data;
+}
 
 export const buildTableau = (shuffledDeck) => {
   const numTableaus = 6;
   const tableaus = {};
   let numPops = 1;
   for (let i = 0; i <= numTableaus; i++) {
-    tableaus[`tableau_${i}`] = [];
+    tableaus[`tableau_${i}`] = {
+      sequence: [],
+      meta: {},
+    };
     for (let ipop = 0; ipop < numPops; ipop++) {
-      tableaus[`tableau_${i}`].push({
-        card: shuffledDeck.pop(),
-        visible: (ipop === numPops - 1),
+      const card = shuffledDeck.pop();
+      tableaus[`tableau_${i}`].sequence.push(card);
+      tableaus[`tableau_${i}`].meta[card] = {
+        isFaceUp: (ipop === numPops - 1),
         draggable: (ipop === numPops - 1),
-      });
+      };
     }
     numPops += 1;
   }
@@ -51,3 +69,4 @@ export const buildTableau = (shuffledDeck) => {
 export const isCardRed = (card) => {
   return !!(card.includes("diamond") || card.includes("heart"));
 };
+

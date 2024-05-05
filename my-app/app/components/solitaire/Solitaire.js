@@ -3,8 +3,9 @@ import { useReducer } from "react";
 import { suits, cards } from "@/app/constants.mjs";
 import {
   shuffleArray,
-  buildDeck,
+  buildFullDeck,
   buildTableau,
+  buildDeck,
   isCardRed,
 } from "@/app/cardUtilities.mjs";
 import Tableau from "@/app/components/tableau/Tableau";
@@ -20,7 +21,7 @@ import { DndContext } from "@dnd-kit/core";
 export default function Solitaire(props) {
   // console.log(` These are the props for home: `, props);
   // we can use localStorage to save games in progress.
-  const fullDeck = buildDeck(suits, cards);
+  const fullDeck = buildFullDeck(suits, cards);
   const shuffledDeck = shuffleArray(fullDeck);
   const {
     tableau_0,
@@ -32,9 +33,13 @@ export default function Solitaire(props) {
     tableau_6,
   } = buildTableau(shuffledDeck);
 
+  const deck = buildDeck(shuffledDeck);
   const [pilesState, pilesDispatch] = useReducer(solitaireReducer, {
-    deck: shuffledDeck,
-    waste: [],
+    deck: deck,
+    waste: {
+      sequence: [],
+      meta: {}
+    },
     tableau_0: tableau_0,
     tableau_1: tableau_1,
     tableau_2: tableau_2,
@@ -42,10 +47,22 @@ export default function Solitaire(props) {
     tableau_4: tableau_4,
     tableau_5: tableau_5,
     tableau_6: tableau_6,
-    build_heart: [],
-    build_spade: [],
-    build_diamond: [],
-    build_club: [],
+    build_heart: {
+      sequence: [],
+      meta: {}
+    },
+    build_spade: {
+      sequence: [],
+      meta: {}
+    },
+    build_diamond: {
+      sequence: [],
+      meta: {}
+    },
+    build_club: {
+      sequence: [],
+      meta: {}
+    },
   });
 
   const providerState = {
@@ -53,93 +70,11 @@ export default function Solitaire(props) {
     dispatch: pilesDispatch,
   };
 
-  console.log(" -> Piles state: ", pilesState);
+  // console.log(" -> Piles state: ", pilesState);
 
-  // const [heartPile, heartPileUpdate] = useState([]);
-  // const [spadePile, spadePileUpdate] = useState([]);
-  // const [diamondPile, diamondPileUpdate] = useState([]);
-  // const [clubPile, clubPileUpdate] = useState([]);
-  // const buildingPiles = {
-  //   heart: {
-  //     pile: heartPile,
-  //     update: heartPileUpdate,
-  //   },
-  //   spade: {
-  //     pile: spadePile,
-  //     update: spadePileUpdate,
-  //   },
-  //   diamond: {
-  //     pile: diamondPile,
-  //     update: diamondPileUpdate,
-  //   },
-  //   club: {
-  //     pile: clubPile,
-  //     update: clubPileUpdate,
-  //   },
-  // };
-
-  // const [tableauPile0, tableauPile0Update] = useState(tableau[0]);
-  // const [tableauPile1, tableauPile1Update] = useState(tableau[1]);
-  // const [tableauPile2, tableauPile2Update] = useState(tableau[2]);
-  // const [tableauPile3, tableauPile3Update] = useState(tableau[3]);
-  // const [tableauPile4, tableauPile4Update] = useState(tableau[4]);
-  // const [tableauPile5, tableauPile5Update] = useState(tableau[5]);
-  // const [tableauPile6, tableauPile6Update] = useState(tableau[6]);
-  // const tableauPiles = {
-  //   tableauPile0: { pile: tableauPile0, update: tableauPile0Update },
-  //   tableauPile1: { pile: tableauPile1, update: tableauPile1Update },
-  //   tableauPile2: { pile: tableauPile2, update: tableauPile2Update },
-  //   tableauPile3: { pile: tableauPile3, update: tableauPile3Update },
-  //   tableauPile4: { pile: tableauPile4, update: tableauPile4Update },
-  //   tableauPile5: { pile: tableauPile5, update: tableauPile5Update },
-  //   tableauPile6: { pile: tableauPile6, update: tableauPile6Update },
-  // };
-
-  // const wasteReducer = (state, action) => {
-  //   switch (action.type) {
-  //     case "addCard": {
-  //       if (state.includes(action.card)) {
-  //         return state;
-  //       }
-  //       return [...state, action.card];
-  //     }
-  //     case "removeTopCard": {
-  //       if (state.includes(action.card)) {
-  //         return state.pop();
-  //       }
-  //       return state;
-  //     }
-  //     case "moveWasteToDeck": {
-  //       // this needs to move all cards back to the deck and preserve the order.
-  //       return [];
-  //     }
-  //     default:
-  //       throw new Error();
-  //   }
-  // };
-  // const [waste, updateWaste] = useReducer(wasteReducer, []);
-
-  // const deckReducer = (state = shuffledDeck, action) => {
-  //   switch (action.type) {
-  //     case "addCardToWaste": {
-  //       // this needs to pop a card off of the deck reducer and add it to the waste
-  //       const newState = [...state];
-  //       const flippedCard = newState.pop();
-  //       updateWaste({ type: "addCard", card: flippedCard });
-  //       return newState;
-  //     }
-  //     case "resetDeck": {
-  //       // this needs to move all cards back to the shuffled deck
-  //       return [];
-  //     }
-  //     default:
-  //       throw new Error();
-  //   }
-  // };
-  // const [deck, updateDeck] = useReducer(deckReducer, shuffledDeck);
-
-  const deckClickHandler = () => {
-    updateDeck({ type: "addCardToWaste" });
+  const deckClickHandler = (event, card) => {
+    console.log(` -> deck click event on ${card}: `)
+    pilesDispatch({ type: "moveCardBetweenPiles", sourcePile: "deck", destinationPile: "waste", card, isFaceUp: true, isDraggable: true });
   };
   const wasteDoubleClickHandler = () => {
     const topCard = waste[waste.length - 1];
@@ -287,22 +222,21 @@ export default function Solitaire(props) {
             return elements;
           })()}
           {/* The waste */}
-          {/* <div className="bg-slate-600 grow mx-2 justify-center">
+          <div className="bg-slate-600 grow mx-2 justify-center">
           <Pile
             cards={pilesState.waste}
             doubleClickHandler={wasteDoubleClickHandler}
             id="wastePile"
           />
-        </div> */}
+        </div>
           {/* The deck */}
-          {/* <div className="bg-slate-600 grow mx-2 justify-center">
+          <div className="bg-slate-600 grow mx-2 justify-center">
           <Pile
             cards={pilesState.deck}
-            clickHandler={deckClickHandler}
+            clickHandlerForLastCard={deckClickHandler}
             id="deckPile"
-            cardFaceBehavior="down"
           />
-        </div> */}
+        </div>
         </section>
         {/* <section className="mt-20 bg-slate-800 size-full flex">
         <Tableau
