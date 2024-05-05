@@ -3,7 +3,16 @@
 import { useDraggable } from "@dnd-kit/core";
 import styles from "./Card.module.css";
 
-export default function Tableau(props) {
+interface CardProps {
+  isFaceUp: boolean;
+  isDraggable: boolean;
+  card: string;
+  source?: string; // Do we still need this?
+  doubleClickHandler: Function | undefined;
+  clickHandler: Function | undefined;
+}
+
+export default function Tableau(props: CardProps) {
   const {
     isFaceUp,
     isDraggable,

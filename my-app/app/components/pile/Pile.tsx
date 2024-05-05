@@ -1,42 +1,47 @@
 "use client";
 
-// import { suits, cards } from "../../constants.mjs";
 import Card from "@/app/components/card/Card";
 import { useDroppable } from "@dnd-kit/core";
+import { PileInterface, PileIdsInterface } from "@/app/types/solitaire.types"
+import { useSolitaireContext } from "@/app/context/Solitaire.context";
 
-export default function Pile(props) {
+interface PileProps {
+  doubleClickHandlerForLastCard: Function;
+  clickHandlerForLastCard: Function;
+  pileId: PileIdsInterface;
+  droppable: boolean,
+}
+export default function Pile(props: PileProps) {
   const {
-    cards = {},
     doubleClickHandlerForLastCard,
     clickHandlerForLastCard,
-    id = "",
+    pileId,
     droppable = false,
   } = props;
+  const { state, dispatch} = useSolitaireContext();
   const { isOver, setNodeRef } = useDroppable({
-    id,
+    id: pileId,
   });
   const dragOverStyle = {
     backgroundColor: isOver ? "green" : undefined,
   };
+  const pile = state[pileId];
   return (
     
     <ol
       className="list-decimal list-inside border p-4"
       style={dragOverStyle}
       ref={droppable ? setNodeRef : () => {}}
-      data-pile={id}
+      data-pile={pileId}
     >
       {(() => {
         const elements = [];
-        const sequence = cards.sequence || [];
+        const sequence = pile.sequence || [];
         for (let i = 0; i < sequence.length; i++) {
           const card = sequence[i];
-          const { isFaceUp, isDraggable } = cards.meta[card];
-          if(id === 'wastePile') {
-            console.log( ` isDraggable: ${isDraggable}`)
-          }
+          const { isFaceUp, isDraggable } = pile.meta[card];
           elements.push(
-            <li key={`cards-${i}`}>
+            <li key={`${pileId}-${card}`}>
               <Card
                 isFaceUp={isFaceUp}
                 card={card}

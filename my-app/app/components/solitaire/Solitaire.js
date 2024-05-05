@@ -10,6 +10,7 @@ import {
 } from "@/app/cardUtilities.mjs";
 import Tableau from "@/app/components/tableau/Tableau";
 import Pile from "@/app/components/pile/Pile";
+import BuildPiles from "@/app/components/buildPiles/BuildPiles";
 import solitaireReducer from "@/app/reducers/solitaire.reducer";
 import SolitaireContext from "@/app/context/Solitaire.context";
 import { DndContext } from "@dnd-kit/core";
@@ -200,47 +201,24 @@ export default function Solitaire(props) {
       <DndContext onDragEnd={handleDragEnd}>
         <section className="mt-20 bg-slate-800 size-full flex">
           {/* Building piles - todo: componetize this */}
-          {(() => {
-            const elements = [];
-            for (let i = 0; i < suits.length; i++) {
-              const suit = suits[i];
-              elements.push(
-                <div
-                  className="bg-slate-600 grow mx-2 justify-center"
-                  key={`suits-${i}`}
-                >
-                  <h2>{suit}</h2>
-                  <Pile
-                    cards={pilesState[`build_${suit}`]}
-                    id={`build_${suit}`}
-                    droppable="true"
-                  />
-                </div>
-              );
-            }
-
-            return elements;
-          })()}
+          <BuildPiles />
           {/* The waste */}
           <div className="bg-slate-600 grow mx-2 justify-center">
           <Pile
-            cards={pilesState.waste}
-            doubleClickHandler={wasteDoubleClickHandler}
-            id="wastePile"
+            doubleClickHandlerForLastCard={wasteDoubleClickHandler}
+            pileId="waste"
           />
         </div>
           {/* The deck */}
           <div className="bg-slate-600 grow mx-2 justify-center">
           <Pile
-            cards={pilesState.deck}
+            pileId='deck'
             clickHandlerForLastCard={deckClickHandler}
-            id="deckPile"
           />
         </div>
         </section>
         <section className="mt-20 bg-slate-800 size-full flex">
         <Tableau
-          // tableauPiles={pilesState}
           // tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
           // buildingPiles={buildingPiles}
         />
