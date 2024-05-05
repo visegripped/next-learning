@@ -6,6 +6,7 @@ import styles from "./Card.module.css";
 export default function Tableau(props) {
   const {
     isFaceUp,
+    isDraggable,
     card,
     source = "",
     doubleClickHandler = () => {
@@ -24,11 +25,13 @@ export default function Tableau(props) {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
       }
     : undefined;
+  const cssClasses = styles[`card__${isFaceUp ? 'front' : 'back'}`]
 
-  return isFaceUp ? (
+  return isDraggable ? (
     <div
-      className={styles.card__front}
+      className={cssClasses}
       data-source={source}
+      onClick={(e) => {clickHandler(e, card)}}
       onDoubleClick={(e) => {doubleClickHandler(e, card)}}
       style={draggableStyle}
       ref={setNodeRef}
@@ -38,8 +41,11 @@ export default function Tableau(props) {
       {card}
     </div>
   ) : (
-    <div className={styles.card__back} onClick={(e) => {clickHandler(e, card)}}>
-      Card back {card}
+    <div className={cssClasses} 
+    onClick={(e) => {clickHandler(e, card)}}
+    onDoubleClick={(e) => {doubleClickHandler(e, card)}}
+    >
+      {isFaceUp ? card: `card back ${card}`} {/* here for testing purposes only */}
     </div>
   );
 }

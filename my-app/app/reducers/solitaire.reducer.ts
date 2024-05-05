@@ -1,36 +1,64 @@
 import { useReducer, useState } from "react";
-import { CardInterface, PilesInterface, PileIdsInterface } from "@/app/types/solitaire.types";
-
+import {
+  CardInterface,
+  PilesInterface,
+  PileIdsInterface,
+} from "@/app/types/solitaire.types";
 
 export type ActionInterface = {
-  type: 'moveCardBetweenPiles' | 'removeCardFromPile' | 'movePile' | 'movePileByCardId';
+  type:
+    | "moveCardBetweenPiles"
+    | "removeCardFromPile"
+    | "movePile"
+    | "movePileByCardId"
+    | "makeOnlyLastCardInPileDraggable";
   sourcePile: PileIdsInterface;
-  destinationPile: PileIdsInterface;
+  targetPile: PileIdsInterface;
   card: string;
   isFaceUp: boolean;
   isDraggable: boolean;
-}
+};
 
-export const solitaireReducer = (state: PilesInterface, action: ActionInterface) => {
+export const solitaireReducer = (
+  state: PilesInterface,
+  action: ActionInterface
+) => {
+  const newState = { ...state };
+  const { sourcePile, targetPile, card, isFaceUp, isDraggable } = action;
+  console.log(`useReducer - ${action.type}
+  card: ${card}
+  sourcePile: ${sourcePile}
+  targetPile: ${targetPile}
+  `);
+  const source = newState[sourcePile];
+  const target = newState[targetPile];
   switch (action.type) {
-    case 'moveCardBetweenPiles':
-      const { sourcePile, destinationPile, card, isFaceUp, isDraggable} = action;
-      const source = state[sourcePile];
-      const destination = state[destinationPile];
+    case "moveCardBetweenPiles":
       const sourceIndex = source.sequence.indexOf(card);
-      if(destination.sequence.indexOf(card) >= 0) {
-        //card is already in destination pile
+      if (target.sequence.indexOf(card) >= 0) {
+        //card is already in target pile
       } else {
         source.sequence.splice(sourceIndex, 1);
-        delete state[sourcePile].meta[card];
-        state[destinationPile].meta[card] = {
+        delete newState[sourcePile].meta[card];
+        newState[targetPile].sequence.push(card);
+        newState[targetPile].meta[card] = {
           isFaceUp,
           isDraggable,
-        }
+        };
       }
-      return state;
-    case 'removeCardFromPile':
+      return newState;
+    case "makeOnlyLastCardInPileDraggable":
+      target.sequence.forEach((card, index, arr) => {
+        if (index === arr.length - 1) {
+          target.meta[card].isDraggable = true;
+        } else {
+          target.meta[card].isDraggable = false;
+        }
+      });
+      return newState;
+    case "removeCardFromPile":
       return false;
+      break;
     default:
       return state;
   }

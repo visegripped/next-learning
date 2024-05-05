@@ -2,13 +2,16 @@
 
 import Pile from "@/app/components/pile/Pile";
 import { cards } from "@/app/constants.mjs";
+import { useSolitaireContext } from "@/app/context/Solitaire.context";
 
 export default function Tableau(props) {
   const {
-    tableauPiles = {},
     tryAddingCardToBuildingPile,
     buildingPiles,
   } = props;
+
+  const { state, dispatch} = useSolitaireContext();
+
   const cardDoubleClickHandler = (event, cardProps) => {
     const { card } = cardProps;
     if (tryAddingCardToBuildingPile(card, cards, buildingPiles)) {
@@ -25,21 +28,20 @@ export default function Tableau(props) {
     <>
       {(() => {
         const elements = [];
-        const numTableaus = Object.keys(tableauPiles).length;
+        const numTableaus = 6;
         for (let i = 0; i < numTableaus; i++) {
-          const cards = tableauPiles[`tableauPile${i}`].pile;
+          const cards = state[`tableau_${i}`];
           elements.push(
             <div
               className="bg-slate-600 grow mx-2 justify-center"
               data-tableau-pile={i}
-              key={`tableau-${i}`}
-              id={`tableauPile-${i}`}
+              key={`tableau_${i}`}
+              id={`tableau_${i}`}
             >
               <Pile
                 cards={cards}
                 doubleClickHandler={cardDoubleClickHandler}
-                cardFaceBehavior="showLastCard"
-                id={`tableauPile-${i}`}
+                id={`tableau_${i}`}
               />
             </div>
           );

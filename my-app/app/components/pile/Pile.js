@@ -19,6 +19,7 @@ export default function Pile(props) {
     backgroundColor: isOver ? "green" : undefined,
   };
   return (
+    
     <ol
       className="list-decimal list-inside border p-4"
       style={dragOverStyle}
@@ -31,6 +32,9 @@ export default function Pile(props) {
         for (let i = 0; i < sequence.length; i++) {
           const card = sequence[i];
           const { isFaceUp, isDraggable } = cards.meta[card];
+          if(id === 'wastePile') {
+            console.log( ` isDraggable: ${isDraggable}`)
+          }
           elements.push(
             <li key={`cards-${i}`}>
               <Card

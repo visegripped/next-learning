@@ -73,8 +73,8 @@ export default function Solitaire(props) {
   // console.log(" -> Piles state: ", pilesState);
 
   const deckClickHandler = (event, card) => {
-    console.log(` -> deck click event on ${card}: `)
-    pilesDispatch({ type: "moveCardBetweenPiles", sourcePile: "deck", destinationPile: "waste", card, isFaceUp: true, isDraggable: true });
+    pilesDispatch({ type: "moveCardBetweenPiles", sourcePile: "deck", targetPile: "waste", card, isFaceUp: true, isDraggable: true });
+    pilesDispatch({targetPile: 'waste', type: 'makeOnlyLastCardInPileDraggable'});
   };
   const wasteDoubleClickHandler = () => {
     const topCard = waste[waste.length - 1];
@@ -238,13 +238,13 @@ export default function Solitaire(props) {
           />
         </div>
         </section>
-        {/* <section className="mt-20 bg-slate-800 size-full flex">
+        <section className="mt-20 bg-slate-800 size-full flex">
         <Tableau
-          tableauPiles={pilesState}
-          tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
-          buildingPiles={buildingPiles}
+          // tableauPiles={pilesState}
+          // tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
+          // buildingPiles={buildingPiles}
         />
-      </section> */}
+      </section>
       </DndContext>
     </SolitaireContext.Provider>
   );
