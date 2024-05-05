@@ -38,3 +38,7 @@ export type PileIdsInterface =
   | "build_spade"
   | "build_diamond"
   | "build_club";
+
+  export type CardInterface = `${string}"${string}`;
+  export type SuitInterface = 'spade' | 'diamond' | 'heart' | 'club';
+  export type CardFaceInterface = 'ace' | 'two' | 'three' | 'four' | 'five' | 'six' | 'seven' | 'eight' | 'nine' | 'ten' | 'jack' | 'queen' | 'king'
