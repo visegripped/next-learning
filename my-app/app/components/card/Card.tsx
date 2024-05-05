@@ -3,9 +3,19 @@
 import { useDraggable } from "@dnd-kit/core";
 import styles from "./Card.module.css";
 
-export default function Tableau(props) {
+interface CardProps {
+  isFaceUp: boolean;
+  isDraggable: boolean;
+  card: string;
+  source?: string; // Do we still need this?
+  doubleClickHandler: Function | undefined;
+  clickHandler: Function | undefined;
+}
+
+export default function Tableau(props: CardProps) {
   const {
     isFaceUp,
+    isDraggable,
     card,
     source = "",
     doubleClickHandler = () => {
@@ -24,16 +34,14 @@ export default function Tableau(props) {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
       }
     : undefined;
+  const cssClasses = styles[`card__${isFaceUp ? 'front' : 'back'}`]
 
-  const doubleClickHandlerWrapper = (event, props) => {
-    doubleClickHandler(event, { card });
-  };
-
-  return isFaceUp ? (
+  return isDraggable ? (
     <div
-      className={styles.card__front}
+      className={cssClasses}
       data-source={source}
-      onDoubleClick={doubleClickHandlerWrapper}
+      onClick={(e) => {clickHandler(e, card)}}
+      onDoubleClick={(e) => {doubleClickHandler(e, card)}}
       style={draggableStyle}
       ref={setNodeRef}
       {...listeners}
@@ -42,8 +50,11 @@ export default function Tableau(props) {
       {card}
     </div>
   ) : (
-    <div className={styles.card__back} onClick={clickHandler}>
-      Card back {card}
+    <div className={cssClasses} 
+    onClick={(e) => {clickHandler(e, card)}}
+    onDoubleClick={(e) => {doubleClickHandler(e, card)}}
+    >
+      {isFaceUp ? card: `card back ${card}`} {/* here for testing purposes only */}
     </div>
   );
 }
