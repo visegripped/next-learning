@@ -1,23 +1,19 @@
 import { cards } from "@/app/constants";
 import { SuitInterface, CardFaceInterface, CardInterface } from "@/app/types/solitaire.types";
 
-const canCardBeAddedToBuildStack = (card: CardInterface, sequence: string[] = []) => {
-  console.log('BEGIN canCardBeAddedToBuildStack')
+const canCardBeAddedToBuildStack = (card: CardInterface, sequence: string[] = [], targetBuildPileSuit: SuitInterface) => {
   const [cardFace, suit] = card.split(":") as [CardFaceInterface, SuitInterface];
   const cardValue = cards[cardFace];
-  let topCardOfSequenceValue = 0;
+  let topCardOfSequenceValue = 1;
   const topCardOfSequence = sequence.pop() || ':';
-  const [topCardOfSequenceFace, topCardOfSequenceSuit] = topCardOfSequence.split(":") as [CardFaceInterface, SuitInterface];
+  const [topCardOfSequenceFace] = topCardOfSequence.split(":") as [CardFaceInterface];
   if(topCardOfSequenceFace) {
-    topCardOfSequenceValue = cards[topCardOfSequenceFace];
+    topCardOfSequenceValue = cards[topCardOfSequenceFace] - 1;
   }
-  if(suit != topCardOfSequenceSuit) {
-    console.log( ' -> Suits do not match')
-    return false;
+  if(suit === targetBuildPileSuit && cardValue === topCardOfSequenceValue) {
+    return true;
   }
-  if(cardValue !== topCardOfSequenceValue + 1) {
-    console.log(' -> cards are not sequential')
-    return false;
-  }
-  return true;
+  return false;
 }
+
+export default canCardBeAddedToBuildStack;
