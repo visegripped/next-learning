@@ -1,6 +1,6 @@
 "use client";
 import { useReducer } from "react";
-import { suits, cards } from "@/app/constants.mjs";
+import { suits, cards } from "@/app/constants";
 import {
   shuffleArray,
   buildFullDeck,

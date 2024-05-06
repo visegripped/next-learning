@@ -1,5 +1,5 @@
 "use client";
-import { suits } from "@/app/constants.mjs";
+import { suits } from "@/app/constants";
 import { useSolitaireContext } from "@/app/context/Solitaire.context";
 import Pile from "@/app/components/pile/Pile";
 import {
