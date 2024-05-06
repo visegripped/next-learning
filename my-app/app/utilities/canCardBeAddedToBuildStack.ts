@@ -1,4 +1,4 @@
-import { cards } from "@/app/constants.mjs";
+import { cards } from "@/app/constants";
 import { SuitInterface, CardFaceInterface, CardInterface } from "@/app/types/solitaire.types";
 
 const canCardBeAddedToBuildStack = (card: CardInterface, sequence: string[] = []) => {
