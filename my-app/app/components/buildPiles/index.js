@@ -1,2 +1,2 @@
-import BuildPiles from './BuildPiles'
+import BuildPiles from "./BuildPiles";
 export default BuildPiles;

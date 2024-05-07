@@ -1,17 +1,17 @@
 import { PileInterface } from "@/app/types/solitaire.types";
 const buildDeck = (fullDeck: string[] = []) => {
-  const data : PileInterface = {
+  const data: PileInterface = {
     sequence: [],
-    meta: {}
+    meta: {},
   };
   fullDeck.forEach((card) => {
     data.sequence.push(card);
     data.meta[card] = {
-      isFaceUp : false,
+      isFaceUp: false,
       isDraggable: false,
-    }
+    };
   });
   return data;
-}
+};
 
-export default buildDeck
+export default buildDeck;

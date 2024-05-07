@@ -34,14 +34,18 @@ export default function Tableau(props: CardProps) {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
       }
     : undefined;
-  const cssClasses = styles[`card__${isFaceUp ? 'front' : 'back'}`]
+  const cssClasses = styles[`card__${isFaceUp ? "front" : "back"}`];
 
   return isDraggable ? (
     <div
       className={cssClasses}
       data-source={source}
-      onClick={(e) => {clickHandler(e, card)}}
-      onDoubleClick={(e) => {doubleClickHandler(e, card)}}
+      onClick={(e) => {
+        clickHandler(e, card);
+      }}
+      onDoubleClick={(e) => {
+        doubleClickHandler(e, card);
+      }}
       style={draggableStyle}
       ref={setNodeRef}
       {...listeners}
@@ -50,11 +54,17 @@ export default function Tableau(props: CardProps) {
       {card}
     </div>
   ) : (
-    <div className={cssClasses} 
-    onClick={(e) => {clickHandler(e, card)}}
-    onDoubleClick={(e) => {doubleClickHandler(e, card)}}
+    <div
+      className={cssClasses}
+      onClick={(e) => {
+        clickHandler(e, card);
+      }}
+      onDoubleClick={(e) => {
+        doubleClickHandler(e, card);
+      }}
     >
-      {isFaceUp ? card: `card back ${card}`} {/* here for testing purposes only */}
+      {isFaceUp ? card : `card back ${card}`}{" "}
+      {/* here for testing purposes only */}
     </div>
   );
 }

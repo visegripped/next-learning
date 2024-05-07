@@ -9,12 +9,13 @@ interface TableauProps {
 }
 
 export default function Tableau(props: TableauProps) {
-  const {
-    tryAddingCardToBuildingPile,
-  } = props;
+  const { tryAddingCardToBuildingPile } = props;
 
-  const cardDoubleClickHandler = (event: ReactEventHandler, cardProps: string) => {
-    console.log(' -> card?', cardProps)
+  const cardDoubleClickHandler = (
+    event: ReactEventHandler,
+    cardProps: string,
+  ) => {
+    console.log(" -> card?", cardProps);
     // const { card } = cardProps;
     // if (tryAddingCardToBuildingPile(card, cards, buildingPiles)) {
     //   const cardTableauPile = event.target
@@ -43,7 +44,7 @@ export default function Tableau(props: TableauProps) {
                 doubleClickHandler={cardDoubleClickHandler}
                 pileId={`tableau_${i}`}
               />
-            </div>
+            </div>,
           );
         }
 
