@@ -3,7 +3,7 @@ import { cards, suits } from "@/app/constants";
 
 const buildFullDeck = () => {
   const deck: string[] = [];
-  suits.forEach((suit : SuitInterface) => {
+  suits.forEach((suit: SuitInterface) => {
     const cardKeys = Object.keys(cards);
     cardKeys.forEach((card: CardFaceInterface) => {
       deck.push(`${card}:${suit}`);

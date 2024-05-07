@@ -1,7 +1,7 @@
 import { CardFaceInterface, PileInterface } from "@/app/types/solitaire.types";
 const buildTableau = (shuffledDeck: CardFaceInterface[] = []) => {
   const numTableaus = 7;
-  const tableaus = {} as {[key:string]: PileInterface};
+  const tableaus = {} as { [key: string]: PileInterface };
   let numPops = 1;
   for (let i = 0; i < numTableaus; i++) {
     const tableauId: string = `tableau_${i}`;
@@ -13,8 +13,8 @@ const buildTableau = (shuffledDeck: CardFaceInterface[] = []) => {
       const card: CardFaceInterface = shuffledDeck.pop();
       tableaus[tableauId].sequence.push(card);
       tableaus[tableauId].meta[card] = {
-        isFaceUp: (ipop === numPops - 1),
-        isDraggable: (ipop === numPops - 1),
+        isFaceUp: ipop === numPops - 1,
+        isDraggable: ipop === numPops - 1,
       };
     }
     numPops += 1;

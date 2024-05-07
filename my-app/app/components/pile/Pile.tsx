@@ -2,14 +2,14 @@
 
 import Card from "@/app/components/card/Card";
 import { useDroppable } from "@dnd-kit/core";
-import { PileInterface, PileIdsInterface } from "@/app/types/solitaire.types"
+import { PileInterface, PileIdsInterface } from "@/app/types/solitaire.types";
 import { useSolitaireContext } from "@/app/context/Solitaire.context";
 
 interface PileProps {
   doubleClickHandlerForLastCard: Function;
   clickHandlerForLastCard: Function;
   pileId: PileIdsInterface;
-  droppable: boolean,
+  droppable: boolean;
 }
 export default function Pile(props: PileProps) {
   const {
@@ -18,7 +18,7 @@ export default function Pile(props: PileProps) {
     pileId,
     droppable = false,
   } = props;
-  const { state, dispatch} = useSolitaireContext();
+  const { state, dispatch } = useSolitaireContext();
   const { isOver, setNodeRef } = useDroppable({
     id: pileId,
   });
@@ -27,7 +27,6 @@ export default function Pile(props: PileProps) {
   };
   const pile = state[pileId];
   return (
-    
     <ol
       className="list-decimal list-inside border p-4"
       style={dragOverStyle}
@@ -45,11 +44,19 @@ export default function Pile(props: PileProps) {
               <Card
                 isFaceUp={isFaceUp}
                 card={card}
-                clickHandler={clickHandlerForLastCard && i === sequence.length - 1 ? clickHandlerForLastCard : undefined}
-                doubleClickHandler={doubleClickHandlerForLastCard && i === sequence.length - 1 ? doubleClickHandlerForLastCard : undefined}
+                clickHandler={
+                  clickHandlerForLastCard && i === sequence.length - 1
+                    ? clickHandlerForLastCard
+                    : undefined
+                }
+                doubleClickHandler={
+                  doubleClickHandlerForLastCard && i === sequence.length - 1
+                    ? doubleClickHandlerForLastCard
+                    : undefined
+                }
                 isDraggable={isDraggable}
               />
-            </li>
+            </li>,
           );
         }
 

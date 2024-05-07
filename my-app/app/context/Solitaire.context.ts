@@ -1,10 +1,10 @@
-import React, {Dispatch} from 'react';
-import {ActionInterface} from '@/app/reducers/solitaire.reducer';
-import { PilesInterface } from '../types/solitaire.types';
+import React, { Dispatch } from "react";
+import { ActionInterface } from "@/app/reducers/solitaire.reducer";
+import { PilesInterface } from "../types/solitaire.types";
 
 interface IContextProps {
   state: PilesInterface;
-  dispatch:Dispatch<ActionInterface>
+  dispatch: Dispatch<ActionInterface>;
 }
 
 const SolitaireContext = React.createContext({} as IContextProps);

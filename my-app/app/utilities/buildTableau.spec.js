@@ -1,15 +1,12 @@
-import { expect, test } from 'vitest'
-import buildTableau from './buildTableau';
-import buildFullDeck from './buildFullDeck';
+import { expect, test } from "vitest";
+import buildTableau from "./buildTableau";
+import buildFullDeck from "./buildFullDeck";
 
-
-
-
-test('Returns an object with the correct number of piles', () => {
+test("Returns an object with the correct number of piles", () => {
   expect(Object.keys(buildTableau()).length).toEqual(7);
 });
 
-test('Only the last card in a pile should be face up', () => {
+test("Only the last card in a pile should be face up", () => {
   const deck = buildFullDeck();
   const tableau = buildTableau(deck);
   const results = tableau.tableau_6.sequence.filter((card) => {
@@ -20,7 +17,7 @@ test('Only the last card in a pile should be face up', () => {
   expect(tableau.tableau_6.meta[lastCard].isFaceUp).toBe(true);
 });
 
-test('Only the last card in a pile should be draggable', () => {
+test("Only the last card in a pile should be draggable", () => {
   const deck = buildFullDeck();
   const tableau = buildTableau(deck);
   const results = tableau.tableau_6.sequence.filter((card) => {
@@ -31,8 +28,7 @@ test('Only the last card in a pile should be draggable', () => {
   expect(tableau.tableau_6.meta[lastCard].isDraggable).toBe(true);
 });
 
-
-test('Piles have the correct number of cards', () => {
+test("Piles have the correct number of cards", () => {
   const deck = buildFullDeck();
   const tableau = buildTableau(deck);
   expect(tableau.tableau_0.sequence.length).toEqual(1);

@@ -1,2 +1,2 @@
-import Pile from './Pile'
+import Pile from "./Pile";
 export default Pile;

@@ -21,7 +21,7 @@ export type ActionInterface = {
 
 export const solitaireReducer = (
   state: PilesInterface,
-  action: ActionInterface
+  action: ActionInterface,
 ) => {
   const newState = { ...state };
   const { sourcePile, targetPile, card, isFaceUp, isDraggable } = action;

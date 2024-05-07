@@ -6,24 +6,24 @@ export type PileMetaInterface = {
 export type PileInterface = {
   sequence: string[];
   meta: {
-    [key:string]: PileMetaInterface
+    [key: string]: PileMetaInterface;
   };
 };
 
 export type PilesInterface = {
-  waste: PileInterface
-  deck: PileInterface
-  tableau_0: PileInterface
-  tableau_1: PileInterface
-  tableau_2: PileInterface
-  tableau_3: PileInterface
-  tableau_4: PileInterface
-  tableau_5: PileInterface
-  tableau_6: PileInterface
-  build_heart: PileInterface
-  build_spade: PileInterface
-  build_diamond: PileInterface
-  build_club: PileInterface
+  waste: PileInterface;
+  deck: PileInterface;
+  tableau_0: PileInterface;
+  tableau_1: PileInterface;
+  tableau_2: PileInterface;
+  tableau_3: PileInterface;
+  tableau_4: PileInterface;
+  tableau_5: PileInterface;
+  tableau_6: PileInterface;
+  build_heart: PileInterface;
+  build_spade: PileInterface;
+  build_diamond: PileInterface;
+  build_club: PileInterface;
 };
 
 export type PileIdsInterface =
@@ -41,6 +41,19 @@ export type PileIdsInterface =
   | "build_diamond"
   | "build_club";
 
-  export type CardInterface = `${string}:${string}`;
-  export type SuitInterface = 'spade' | 'diamond' | 'heart' | 'club';
-  export type CardFaceInterface = 'ace' | 'two' | 'three' | 'four' | 'five' | 'six' | 'seven' | 'eight' | 'nine' | 'ten' | 'jack' | 'queen' | 'king'
+export type CardInterface = `${string}:${string}`;
+export type SuitInterface = "spade" | "diamond" | "heart" | "club";
+export type CardFaceInterface =
+  | "ace"
+  | "two"
+  | "three"
+  | "four"
+  | "five"
+  | "six"
+  | "seven"
+  | "eight"
+  | "nine"
+  | "ten"
+  | "jack"
+  | "queen"
+  | "king";

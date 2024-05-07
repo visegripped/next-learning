@@ -1,7 +1,13 @@
 "use client";
 import { useReducer } from "react";
 import { suits, cards } from "@/app/constants.mjs";
-import { shuffleArray, buildTableau, buildFullDeck, buildDeck, isCardRed } from "@/app/utilities";
+import {
+  shuffleArray,
+  buildTableau,
+  buildFullDeck,
+  buildDeck,
+  isCardRed,
+} from "@/app/utilities";
 import Tableau from "@/app/components/tableau/Tableau";
 import Pile from "@/app/components/pile/Pile";
 import BuildPiles from "@/app/components/buildPiles/BuildPiles";
@@ -33,7 +39,7 @@ export default function Solitaire(props) {
     deck: deck,
     waste: {
       sequence: [],
-      meta: {}
+      meta: {},
     },
     tableau_0: tableau_0,
     tableau_1: tableau_1,
@@ -44,19 +50,19 @@ export default function Solitaire(props) {
     tableau_6: tableau_6,
     build_heart: {
       sequence: [],
-      meta: {}
+      meta: {},
     },
     build_spade: {
       sequence: [],
-      meta: {}
+      meta: {},
     },
     build_diamond: {
       sequence: [],
-      meta: {}
+      meta: {},
     },
     build_club: {
       sequence: [],
-      meta: {}
+      meta: {},
     },
   });
 
@@ -68,8 +74,18 @@ export default function Solitaire(props) {
   // console.log(" -> Piles state: ", pilesState);
 
   const deckClickHandler = (event, card) => {
-    pilesDispatch({ type: "moveCardBetweenPiles", sourcePile: "deck", targetPile: "waste", card, isFaceUp: true, isDraggable: true });
-    pilesDispatch({targetPile: 'waste', type: 'makeOnlyLastCardInPileDraggable'});
+    pilesDispatch({
+      type: "moveCardBetweenPiles",
+      sourcePile: "deck",
+      targetPile: "waste",
+      card,
+      isFaceUp: true,
+      isDraggable: true,
+    });
+    pilesDispatch({
+      targetPile: "waste",
+      type: "makeOnlyLastCardInPileDraggable",
+    });
   };
   const wasteDoubleClickHandler = () => {
     const topCard = waste[waste.length - 1];
@@ -88,7 +104,7 @@ export default function Solitaire(props) {
     if (buildingPiles[suit] && buildingPiles[suit].pile.length) {
       const [topOfPileCardFace] =
         buildingPiles[suit].pile[buildingPiles[suit].pile.length - 1].split(
-          ":"
+          ":",
         );
       topOfPileCardValue = cards[topOfPileCardFace];
     }
@@ -97,16 +113,16 @@ export default function Solitaire(props) {
       return true;
     } else {
       console.log(
-        `Try adding the ${newCardFace} of ${suit}s to their respective pile`
+        `Try adding the ${newCardFace} of ${suit}s to their respective pile`,
       );
       // throw an error
       console.log(
         ` -> BuildingPiles[suit] is defined: ${!!buildingPiles[
           suit
-        ]} and length: ${buildingPiles[suit].pile.length}`
+        ]} and length: ${buildingPiles[suit].pile.length}`,
       );
       console.log(
-        `-> topOfPileCardValue: ${topOfPileCardValue} and newCardValue ${newCardValue}`
+        `-> topOfPileCardValue: ${topOfPileCardValue} and newCardValue ${newCardValue}`,
       );
       return false;
     }
@@ -116,7 +132,7 @@ export default function Solitaire(props) {
     newCard,
     cards,
     targetPileId,
-    tableauPileFromState
+    tableauPileFromState,
   ) => {
     const [newCardFace, suit] = newCard.split(":");
     const newCardValue = cards[newCardFace];
@@ -163,7 +179,7 @@ export default function Solitaire(props) {
       OriginatingPileType: ${originatingPileType}
       Card: ${card}
       `,
-      event
+      event,
     );
     if (
       targetPileType === "buildPile" &&
@@ -198,25 +214,22 @@ export default function Solitaire(props) {
           <BuildPiles />
           {/* The waste */}
           <div className="bg-slate-600 grow mx-2 justify-center">
-          <Pile
-            doubleClickHandlerForLastCard={wasteDoubleClickHandler}
-            pileId="waste"
-          />
-        </div>
+            <Pile
+              doubleClickHandlerForLastCard={wasteDoubleClickHandler}
+              pileId="waste"
+            />
+          </div>
           {/* The deck */}
           <div className="bg-slate-600 grow mx-2 justify-center">
-          <Pile
-            pileId='deck'
-            clickHandlerForLastCard={deckClickHandler}
-          />
-        </div>
+            <Pile pileId="deck" clickHandlerForLastCard={deckClickHandler} />
+          </div>
         </section>
         <section className="mt-20 bg-slate-800 size-full flex">
-        <Tableau
+          <Tableau
           // tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
           // buildingPiles={buildingPiles}
-        />
-      </section>
+          />
+        </section>
       </DndContext>
     </SolitaireContext.Provider>
   );

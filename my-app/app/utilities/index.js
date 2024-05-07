@@ -5,4 +5,11 @@ import shuffleArray from "./shuffleArray";
 import buildTableau from "./buildTableau";
 import isCardRed from "./isCardRed";
 
-export { buildDeck, buildFullDeck, buildTableau, canCardBeAddedToBuildStack, isCardRed, shuffleArray };
+export {
+  buildDeck,
+  buildFullDeck,
+  buildTableau,
+  canCardBeAddedToBuildStack,
+  isCardRed,
+  shuffleArray,
+};

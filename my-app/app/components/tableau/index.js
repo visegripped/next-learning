@@ -1,2 +1,2 @@
-import Tableau from './Tableau'
+import Tableau from "./Tableau";
 export default Tableau;
