@@ -1,13 +1,7 @@
 "use client";
 import { useReducer } from "react";
 import { suits, cards } from "@/app/constants.mjs";
-import {
-  shuffleArray,
-  buildFullDeck,
-  buildTableau,
-  buildDeck,
-  isCardRed,
-} from "@/app/cardUtilities.mjs";
+import { shuffleArray, buildTableau, buildFullDeck, buildDeck, isCardRed } from "@/app/utilities";
 import Tableau from "@/app/components/tableau/Tableau";
 import Pile from "@/app/components/pile/Pile";
 import BuildPiles from "@/app/components/buildPiles/BuildPiles";

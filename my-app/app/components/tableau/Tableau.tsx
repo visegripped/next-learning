@@ -30,7 +30,7 @@ export default function Tableau(props: TableauProps) {
     <>
       {(() => {
         const elements = [];
-        const numTableaus = 6;
+        const numTableaus = 7;
         for (let i = 0; i < numTableaus; i++) {
           elements.push(
             <div

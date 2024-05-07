@@ -4,8 +4,10 @@ export type PileMetaInterface = {
 };
 
 export type PileInterface = {
-  sequence: [];
-  meta: PileMetaInterface;
+  sequence: string[];
+  meta: {
+    [key:string]: PileMetaInterface
+  };
 };
 
 export type PilesInterface = {
@@ -39,6 +41,6 @@ export type PileIdsInterface =
   | "build_diamond"
   | "build_club";
 
-  export type CardInterface = `${string}"${string}`;
+  export type CardInterface = `${string}:${string}`;
   export type SuitInterface = 'spade' | 'diamond' | 'heart' | 'club';
   export type CardFaceInterface = 'ace' | 'two' | 'three' | 'four' | 'five' | 'six' | 'seven' | 'eight' | 'nine' | 'ten' | 'jack' | 'queen' | 'king'
