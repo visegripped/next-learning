@@ -127,7 +127,7 @@ export default function Solitaire(props) {
       .getAttribute("data-pile");
     const [sourcePileType] = sourcePile.split("_");
     const targetPile = event.over?.id;
-    const [targetPileType] = targetPile.split("_");
+    const [targetPileType, targetPileData] = targetPile.split("_"); // targetPileData could be the suit OR the tableau id.
     const card = event.active.id;
     const action = `${sourcePileType}2${targetPileType}`;
     console.log(
@@ -143,15 +143,9 @@ export default function Solitaire(props) {
 
     switch (action) {
       case "tableau2build":
-        break;
       case "waste2build":
-        break;
-      case "build2tableau":
-        break;
-      case "waste2tableau":
-        if (
-          canCardBeAddedToTableauPile(card, pilesState[targetPile].sequence)
-        ) {
+        if(canCardBeAddedToBuildPile(card, pilesState[targetPile].sequence, targetPileData)){
+          console.log(' woot ');
           pilesDispatch({
             type: "moveCardBetweenPiles",
             sourcePile,
@@ -162,6 +156,8 @@ export default function Solitaire(props) {
           });
         }
         break;
+      case "build2tableau":
+      case "waste2tableau":
       case "tableau2tableau":
         if (
           canCardBeAddedToTableauPile(card, pilesState[targetPile].sequence)
