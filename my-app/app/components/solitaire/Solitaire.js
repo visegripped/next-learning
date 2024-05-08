@@ -6,8 +6,8 @@ import {
   buildTableau,
   buildFullDeck,
   buildDeck,
-  isCardRed,
-  canCardBeAddedToBuildStack,
+  canCardBeAddedToBuildPile,
+  canCardBeAddedToTableauPile,
 } from "@/app/utilities";
 import Tableau from "@/app/components/tableau/Tableau";
 import Pile from "@/app/components/pile/Pile";
@@ -19,6 +19,7 @@ import { DndContext, useSensors, useSensor, MouseSensor } from "@dnd-kit/core";
 //solitaire anatomy: https://www.britannica.com/topic/solitaire-card-game
 //reducer tutorial: https://blog.logrocket.com/react-usereducer-hook-ultimate-guide/
 // context/reducer: https://stackoverflow.com/questions/63687178/sharing-states-between-two-components-with-usereducer
+// event typings: https://www.tderflinger.com/en/event-typings-of-react-with-type-script
 
 export default function Solitaire(props) {
   // console.log(` These are the props for home: `, props);
@@ -76,7 +77,8 @@ export default function Solitaire(props) {
     useSensor(MouseSensor, {
       // onActivation: (event) => console.log("onActivation", event), // Here!
       activationConstraint: { distance: 25 },
-  }))
+    }),
+  );
   // console.log(" -> Piles state: ", pilesState);
 
   const deckClickHandler = (event, card) => {
@@ -94,9 +96,15 @@ export default function Solitaire(props) {
     });
   };
   const wasteDoubleClickHandler = (event, card) => {
-    const [ face, suit] = card.split(':');
+    const [face, suit] = card.split(":");
     const targetBuildPile = `build_${suit}`;
-    if(canCardBeAddedToBuildStack(card, pilesState[targetBuildPile].sequence, suit)) {
+    if (
+      canCardBeAddedToBuildPile(
+        card,
+        pilesState[targetBuildPile].sequence,
+        suit,
+      )
+    ) {
       pilesDispatch({
         type: "moveCardBetweenPiles",
         sourcePile: "waste",
@@ -112,83 +120,65 @@ export default function Solitaire(props) {
     }
   };
 
-  const tryAddingCardToTableauPile = (
-    newCard,
-    cards,
-    targetPileId,
-    tableauPileFromState,
-  ) => {
-    const [newCardFace, suit] = newCard.split(":");
-    const newCardValue = cards[newCardFace];
-    const targetPileStateId = targetPileId.replace("-", "");
-    const topCardInTargetPile =
-      tableauPileFromState[tableauPileFromState.length - 1];
-    const [topCardInTargetPileFace, topCardInTargetPileSuit] =
-      topCardInTargetPile.split(":");
-    const topCardInTargetPileValue = cards[topCardInTargetPileFace];
-
-    console.log(`Attempting to move a card into a tableau pile
-    card: ${card}
-    card value: ${cardValue}
-    targetPileStateId: ${targetPileStateId}
-    topCardInTargetPile: ${topCardInTargetPile}
-    topCardInTargetPileValue: ${topCardInTargetPileValue}
-    `);
-
-    // if the new card value is not exactly one less, disallow.
-    // if the new card suit isn't opposing color for previous card, disallow.
-    // if the pile is empty, card must be a king.
-    if (topCardInTargetPileValue - newCardValue != 1) {
-      console.log("New card and top pile card are not sequential.");
-      return false;
-    } else if (isCardRed(newCard) === isCardRed(topCardInTargetPile)) {
-      console.log("New card and top pile card are the same color.");
-      return false;
-    }
-  };
-
   const handleDragEnd = (event) => {
-    console.log('BEGIN handleDragEnd')
-    const originatingPile = event.activatorEvent.target
+    console.log("BEGIN handleDragEnd");
+    const sourcePile = event.activatorEvent.target
       .closest("ol")
       .getAttribute("data-pile");
-    const [originatingPileType] = originatingPile.split("-");
-    // const targetPile = event.over?.id;
-    // const [targetPileType] = targetPile.split("-");
-    // const card = event.active.id;
-    // console.log(
-    //   `Got to dragEnd:
-    //   TargetPile: ${targetPile}
-    //   targetPileType: ${targetPileType}
-    //   OriginatingPile: ${originatingPile}
-    //   OriginatingPileType: ${originatingPileType}
-    //   Card: ${card}
-    //   `,
-    //   event,
-    // );
-    // if (
-    //   targetPileType === "buildPile" &&
-    //   originatingPileType === "tableauPile" &&
-    //   tryAddingCardToBuildingPile(card, cards, buildingPiles)
-    // ) {
-    //   // todo: this is duplicated in Tableau double click handler. share it.
-    //   const pileIdInState = originatingPile.replace("-", "");
-    //   const newPile = tableauPiles[pileIdInState].pile;
-    //   newPile.pop();
-    //   tableauPiles[pileId].update(newPile);
-    // } else if (
-    //   targetPileType === "buildPile" &&
-    //   originatingPileType === "wastePile" &&
-    //   tryAddingCardToBuildingPile(card, cards, buildingPiles)
-    // ) {
-    //   const topCard = waste[waste.length - 1];
-    //   updateWaste({
-    //     card: topCard,
-    //     type: "removeTopCard",
-    //   });
-    // } else {
-    //   console.log(`Got to dragEnd w/out matching any conditionals`);
-    // }
+    const [sourcePileType] = sourcePile.split("_");
+    const targetPile = event.over?.id;
+    const [targetPileType] = targetPile.split("_");
+    const card = event.active.id;
+    const action = `${sourcePileType}2${targetPileType}`;
+    console.log(
+      `Got to dragEnd:
+      TargetPile: ${targetPile}
+      targetPileType: ${targetPileType}
+      sourcePile: ${sourcePile}
+      sourcePileType: ${sourcePileType}
+      Card: ${card}
+      action: ${action}
+      `,
+    );
+
+    switch (action) {
+      case "tableau2build":
+        break;
+      case "waste2build":
+        break;
+      case "build2tableau":
+        break;
+      case "waste2tableau":
+        if (
+          canCardBeAddedToTableauPile(card, pilesState[targetPile].sequence)
+        ) {
+          pilesDispatch({
+            type: "moveCardBetweenPiles",
+            sourcePile,
+            targetPile,
+            card,
+            isFaceUp: true,
+            isDraggable: true,
+          });
+        }
+        break;
+      case "tableau2tableau":
+        if (
+          canCardBeAddedToTableauPile(card, pilesState[targetPile].sequence)
+        ) {
+          pilesDispatch({
+            type: "moveCardBetweenPiles",
+            sourcePile,
+            targetPile,
+            card,
+            isFaceUp: true,
+            isDraggable: true,
+          });
+        }
+        break;
+      default:
+        console.log(`Unsupported drop location`);
+    }
   };
 
   return (

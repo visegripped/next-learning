@@ -1,9 +1,5 @@
 import { useReducer, useState } from "react";
-import {
-  CardInterface,
-  PilesInterface,
-  PileIdsInterface,
-} from "@/app/types/solitaire.types";
+import { PilesInterface, PileIdsInterface } from "@/app/types/solitaire.types";
 
 export type ActionInterface = {
   type:
@@ -14,11 +10,11 @@ export type ActionInterface = {
     | "makeOnlyLastCardInPileDraggable"
     | "makeAllFaceUpCardsInPileDraggable"
     | "makeLastCardInPileFaceUp";
-  sourcePile: PileIdsInterface;
-  targetPile: PileIdsInterface;
-  card: string;
-  isFaceUp: boolean;
-  isDraggable: boolean;
+  sourcePile?: PileIdsInterface;
+  targetPile?: PileIdsInterface;
+  card?: string;
+  isFaceUp?: boolean;
+  isDraggable?: boolean;
 };
 
 export const solitaireReducer = (
@@ -67,7 +63,6 @@ export const solitaireReducer = (
       return newState;
     case "makeLastCardInPileFaceUp":
       const lastCard = target.sequence[target.sequence.length - 1];
-      console.log(`last card: ${lastCard}`)
       target.meta[lastCard].isFaceUp = true;
       return newState;
     case "removeCardFromPile":

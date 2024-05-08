@@ -1,5 +1,6 @@
 import buildFullDeck from "./buildFullDeck";
-import canCardBeAddedToBuildStack from "./canCardBeAddedToBuildStack";
+import canCardBeAddedToBuildPile from "./canCardBeAddedToBuildPile";
+import canCardBeAddedToTableauPile from "./canCardBeAddedToTableauPile";
 import buildDeck from "./buildDeck";
 import shuffleArray from "./shuffleArray";
 import buildTableau from "./buildTableau";
@@ -9,7 +10,8 @@ export {
   buildDeck,
   buildFullDeck,
   buildTableau,
-  canCardBeAddedToBuildStack,
+  canCardBeAddedToBuildPile,
+  canCardBeAddedToTableauPile,
   isCardRed,
   shuffleArray,
 };

@@ -3,22 +3,26 @@ import { Dispatch } from "react";
 import Pile from "@/app/components/pile/Pile";
 import { useSolitaireContext } from "@/app/context/Solitaire.context";
 import { ActionInterface } from "@/app/reducers/solitaire.reducer";
-import { ReactEventHandler } from "react";
-import { canCardBeAddedToBuildStack } from "@/app/utilities";
+import { canCardBeAddedToBuildPile } from "@/app/utilities";
 import { PilesInterface } from "@/app/types/solitaire.types";
 
-
 export default function Tableau() {
+  const {
+    state,
+    dispatch,
+  }: { state: PilesInterface; dispatch: Dispatch<ActionInterface> } =
+    useSolitaireContext();
 
-  const { state, dispatch }: { state: PilesInterface, dispatch: Dispatch<ActionInterface> } = useSolitaireContext();
   const cardDoubleClickHandler = (
-    event: React.MouseEventHandler<HTMLAnchorElement>,
+    event: React.BaseSyntheticEvent,
     card: string,
   ) => {
-    const [ face, suit] = card.split(':');
+    const [face, suit] = card.split(":");
     const targetBuildPile = `build_${suit}`;
-    if(canCardBeAddedToBuildStack(card, state[targetBuildPile].sequence, suit)) {
-      const originPileId = event.target.closest('ol').dataset.pile;
+    if (
+      canCardBeAddedToBuildPile(card, state[targetBuildPile].sequence, suit)
+    ) {
+      const originPileId = event.target.closest("ol").dataset.pile;
       dispatch({
         type: "moveCardBetweenPiles",
         sourcePile: originPileId,
@@ -57,11 +61,11 @@ export default function Tableau() {
               <Pile
                 doubleClickHandlerForLastCard={cardDoubleClickHandler}
                 pileId={`tableau_${i}`}
+                droppable={true}
               />
             </div>,
           );
         }
-
         return elements;
       })()}
     </>
