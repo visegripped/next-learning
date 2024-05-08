@@ -2,14 +2,14 @@
 
 import Card from "@/app/components/card/Card";
 import { useDroppable } from "@dnd-kit/core";
-import { PileInterface, PileIdsInterface } from "@/app/types/solitaire.types";
+import { PileIdsInterface } from "@/app/types/solitaire.types";
 import { useSolitaireContext } from "@/app/context/Solitaire.context";
 
 interface PileProps {
-  doubleClickHandlerForLastCard: Function;
-  clickHandlerForLastCard: Function;
+  doubleClickHandlerForLastCard?: Function;
+  clickHandlerForLastCard?: Function;
   pileId: PileIdsInterface;
-  droppable: boolean;
+  droppable?: boolean;
 }
 export default function Pile(props: PileProps) {
   const {

@@ -11,7 +11,9 @@ export type ActionInterface = {
     | "removeCardFromPile"
     | "movePile"
     | "movePileByCardId"
-    | "makeOnlyLastCardInPileDraggable";
+    | "makeOnlyLastCardInPileDraggable"
+    | "makeAllFaceUpCardsInPileDraggable"
+    | "makeLastCardInPileFaceUp";
   sourcePile: PileIdsInterface;
   targetPile: PileIdsInterface;
   card: string;
@@ -55,6 +57,18 @@ export const solitaireReducer = (
           target.meta[card].isDraggable = false;
         }
       });
+      return newState;
+    case "makeAllFaceUpCardsInPileDraggable":
+      target.sequence.forEach((card) => {
+        if (target.meta[card].isFaceUp === true) {
+          target.meta[card].isDraggable = true;
+        }
+      });
+      return newState;
+    case "makeLastCardInPileFaceUp":
+      const lastCard = target.sequence[target.sequence.length - 1];
+      console.log(`last card: ${lastCard}`)
+      target.meta[lastCard].isFaceUp = true;
       return newState;
     case "removeCardFromPile":
       return false;

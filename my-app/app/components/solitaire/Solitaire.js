@@ -7,13 +7,14 @@ import {
   buildFullDeck,
   buildDeck,
   isCardRed,
+  canCardBeAddedToBuildStack,
 } from "@/app/utilities";
 import Tableau from "@/app/components/tableau/Tableau";
 import Pile from "@/app/components/pile/Pile";
 import BuildPiles from "@/app/components/buildPiles/BuildPiles";
 import solitaireReducer from "@/app/reducers/solitaire.reducer";
 import SolitaireContext from "@/app/context/Solitaire.context";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, useSensors, useSensor, MouseSensor } from "@dnd-kit/core";
 
 //solitaire anatomy: https://www.britannica.com/topic/solitaire-card-game
 //reducer tutorial: https://blog.logrocket.com/react-usereducer-hook-ultimate-guide/
@@ -71,6 +72,11 @@ export default function Solitaire(props) {
     dispatch: pilesDispatch,
   };
 
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      // onActivation: (event) => console.log("onActivation", event), // Here!
+      activationConstraint: { distance: 25 },
+  }))
   // console.log(" -> Piles state: ", pilesState);
 
   const deckClickHandler = (event, card) => {
@@ -87,44 +93,22 @@ export default function Solitaire(props) {
       type: "makeOnlyLastCardInPileDraggable",
     });
   };
-  const wasteDoubleClickHandler = () => {
-    const topCard = waste[waste.length - 1];
-    if (tryAddingCardToBuildingPile(topCard, cards, buildingPiles)) {
-      updateWaste({
-        card: topCard,
-        type: "removeTopCard",
+  const wasteDoubleClickHandler = (event, card) => {
+    const [ face, suit] = card.split(':');
+    const targetBuildPile = `build_${suit}`;
+    if(canCardBeAddedToBuildStack(card, pilesState[targetBuildPile].sequence, suit)) {
+      pilesDispatch({
+        type: "moveCardBetweenPiles",
+        sourcePile: "waste",
+        targetPile: targetBuildPile,
+        card,
+        isFaceUp: true,
+        isDraggable: true,
       });
-    }
-  };
-
-  const tryAddingCardToBuildingPile = (card, cards, buildingPiles) => {
-    const [newCardFace, suit] = card.split(":");
-    const newCardValue = cards[newCardFace];
-    let topOfPileCardValue = 0;
-    if (buildingPiles[suit] && buildingPiles[suit].pile.length) {
-      const [topOfPileCardFace] =
-        buildingPiles[suit].pile[buildingPiles[suit].pile.length - 1].split(
-          ":",
-        );
-      topOfPileCardValue = cards[topOfPileCardFace];
-    }
-    if (newCardValue === topOfPileCardValue + 1) {
-      buildingPiles[suit].update([...buildingPiles[suit].pile, card]);
-      return true;
-    } else {
-      console.log(
-        `Try adding the ${newCardFace} of ${suit}s to their respective pile`,
-      );
-      // throw an error
-      console.log(
-        ` -> BuildingPiles[suit] is defined: ${!!buildingPiles[
-          suit
-        ]} and length: ${buildingPiles[suit].pile.length}`,
-      );
-      console.log(
-        `-> topOfPileCardValue: ${topOfPileCardValue} and newCardValue ${newCardValue}`,
-      );
-      return false;
+      pilesDispatch({
+        targetPile: targetBuildPile,
+        type: "makeOnlyLastCardInPileDraggable",
+      });
     }
   };
 
@@ -164,51 +148,52 @@ export default function Solitaire(props) {
   };
 
   const handleDragEnd = (event) => {
+    console.log('BEGIN handleDragEnd')
     const originatingPile = event.activatorEvent.target
       .closest("ol")
       .getAttribute("data-pile");
     const [originatingPileType] = originatingPile.split("-");
-    const targetPile = event.over?.id;
-    const [targetPileType] = targetPile.split("-");
-    const card = event.active.id;
-    console.log(
-      `Got to dragEnd:
-      TargetPile: ${targetPile}
-      targetPileType: ${targetPileType}
-      OriginatingPile: ${originatingPile}
-      OriginatingPileType: ${originatingPileType}
-      Card: ${card}
-      `,
-      event,
-    );
-    if (
-      targetPileType === "buildPile" &&
-      originatingPileType === "tableauPile" &&
-      tryAddingCardToBuildingPile(card, cards, buildingPiles)
-    ) {
-      // todo: this is duplicated in Tableau double click handler. share it.
-      const pileIdInState = originatingPile.replace("-", "");
-      const newPile = tableauPiles[pileIdInState].pile;
-      newPile.pop();
-      tableauPiles[pileId].update(newPile);
-    } else if (
-      targetPileType === "buildPile" &&
-      originatingPileType === "wastePile" &&
-      tryAddingCardToBuildingPile(card, cards, buildingPiles)
-    ) {
-      const topCard = waste[waste.length - 1];
-      updateWaste({
-        card: topCard,
-        type: "removeTopCard",
-      });
-    } else {
-      console.log(`Got to dragEnd w/out matching any conditionals`);
-    }
+    // const targetPile = event.over?.id;
+    // const [targetPileType] = targetPile.split("-");
+    // const card = event.active.id;
+    // console.log(
+    //   `Got to dragEnd:
+    //   TargetPile: ${targetPile}
+    //   targetPileType: ${targetPileType}
+    //   OriginatingPile: ${originatingPile}
+    //   OriginatingPileType: ${originatingPileType}
+    //   Card: ${card}
+    //   `,
+    //   event,
+    // );
+    // if (
+    //   targetPileType === "buildPile" &&
+    //   originatingPileType === "tableauPile" &&
+    //   tryAddingCardToBuildingPile(card, cards, buildingPiles)
+    // ) {
+    //   // todo: this is duplicated in Tableau double click handler. share it.
+    //   const pileIdInState = originatingPile.replace("-", "");
+    //   const newPile = tableauPiles[pileIdInState].pile;
+    //   newPile.pop();
+    //   tableauPiles[pileId].update(newPile);
+    // } else if (
+    //   targetPileType === "buildPile" &&
+    //   originatingPileType === "wastePile" &&
+    //   tryAddingCardToBuildingPile(card, cards, buildingPiles)
+    // ) {
+    //   const topCard = waste[waste.length - 1];
+    //   updateWaste({
+    //     card: topCard,
+    //     type: "removeTopCard",
+    //   });
+    // } else {
+    //   console.log(`Got to dragEnd w/out matching any conditionals`);
+    // }
   };
 
   return (
     <SolitaireContext.Provider value={providerState}>
-      <DndContext onDragEnd={handleDragEnd}>
+      <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
         <section className="mt-20 bg-slate-800 size-full flex">
           {/* Building piles - todo: componetize this */}
           <BuildPiles />
