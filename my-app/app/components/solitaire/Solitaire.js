@@ -142,10 +142,15 @@ export default function Solitaire(props) {
     );
 
     switch (action) {
-      case "tableau2build":
       case "waste2build":
-        if(canCardBeAddedToBuildPile(card, pilesState[targetPile].sequence, targetPileData)){
-          console.log(' woot ');
+      case "tableau2build":
+        if (
+          canCardBeAddedToBuildPile(
+            card,
+            pilesState[targetPile].sequence,
+            targetPileData,
+          )
+        ) {
           pilesDispatch({
             type: "moveCardBetweenPiles",
             sourcePile,
@@ -154,11 +159,21 @@ export default function Solitaire(props) {
             isFaceUp: true,
             isDraggable: true,
           });
+          if (action === "tableau2build") {
+            pilesDispatch({
+              type: "makeLastCardInPileFaceUp",
+              targetPile: sourcePile,
+            });
+            pilesDispatch({
+              type: "makeAllFaceUpCardsInPileDraggable",
+              targetPile: sourcePile,
+            });
+          }
         }
         break;
+      case "tableau2tableau":
       case "build2tableau":
       case "waste2tableau":
-      case "tableau2tableau":
         if (
           canCardBeAddedToTableauPile(card, pilesState[targetPile].sequence)
         ) {
@@ -169,6 +184,14 @@ export default function Solitaire(props) {
             card,
             isFaceUp: true,
             isDraggable: true,
+          });
+          pilesDispatch({
+            type: "makeLastCardInPileFaceUp",
+            targetPile: sourcePile,
+          });
+          pilesDispatch({
+            type: "makeAllFaceUpCardsInPileDraggable",
+            targetPile: sourcePile,
           });
         }
         break;
