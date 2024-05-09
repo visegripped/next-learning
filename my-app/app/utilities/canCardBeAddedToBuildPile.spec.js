@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
-import canCardBeAddedToBuildStack from "./canCardBeAddedToBuildStack";
+import canCardBeAddedToBuildPile from "./canCardBeAddedToBuildPile";
 
 test("returns false if card is empty", () => {
   expect(
-    canCardBeAddedToBuildStack(
+    canCardBeAddedToBuildPile(
       "",
       ["five:spade", "five:club", "five:hearts"],
       "spade",
@@ -12,7 +12,7 @@ test("returns false if card is empty", () => {
 });
 test("returns false if card and last card of sequence are not sequential", () => {
   expect(
-    canCardBeAddedToBuildStack(
+    canCardBeAddedToBuildPile(
       "four:spade",
       ["six:heart", "five:spade", "six:spade"],
       "spade",
@@ -21,7 +21,7 @@ test("returns false if card and last card of sequence are not sequential", () =>
 });
 test("returns false if targetBuildPileSuit is empty", () => {
   expect(
-    canCardBeAddedToBuildStack(
+    canCardBeAddedToBuildPile(
       "four:spade",
       ["six:heart", "five:diamond", "five:spade"],
       "",
@@ -32,9 +32,13 @@ test("returns false if targetBuildPileSuit is empty", () => {
 // happy path
 test("returns true if cards are sequential and the same suit", () => {
   expect(
-    canCardBeAddedToBuildStack("four:spade", ["five:spade"], "spade"),
+    canCardBeAddedToBuildPile(
+      "six:spade",
+      ["three:spade", "four:spade", "five:spade"],
+      "spade",
+    ),
   ).toBe(true);
 });
 test("returns true if sequence is empty and card is an ace", () => {
-  expect(canCardBeAddedToBuildStack("ace:spade", [], "spade")).toBe(true);
+  expect(canCardBeAddedToBuildPile("ace:spade", [], "spade")).toBe(true);
 });

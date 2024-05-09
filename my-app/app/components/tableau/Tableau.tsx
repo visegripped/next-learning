@@ -1,31 +1,49 @@
 "use client";
-
+import { Dispatch } from "react";
 import Pile from "@/app/components/pile/Pile";
-import { cards } from "@/app/constants.mjs";
-import { ReactEventHandler } from "react";
+import { useSolitaireContext } from "@/app/context/Solitaire.context";
+import { ActionInterface } from "@/app/reducers/solitaire.reducer";
+import { canCardBeAddedToBuildPile } from "@/app/utilities";
+import { PilesInterface } from "@/app/types/solitaire.types";
 
-interface TableauProps {
-  tryAddingCardToBuildingPile: Function;
-}
-
-export default function Tableau(props: TableauProps) {
-  const { tryAddingCardToBuildingPile } = props;
+export default function Tableau() {
+  const {
+    state,
+    dispatch,
+  }: { state: PilesInterface; dispatch: Dispatch<ActionInterface> } =
+    useSolitaireContext();
 
   const cardDoubleClickHandler = (
-    event: ReactEventHandler,
-    cardProps: string,
+    event: React.BaseSyntheticEvent,
+    card: string,
   ) => {
-    console.log(" -> card?", cardProps);
-    // const { card } = cardProps;
-    // if (tryAddingCardToBuildingPile(card, cards, buildingPiles)) {
-    //   const cardTableauPile = event.target
-    //     .closest("[data-tableau-pile]")
-    //     .getAttribute("data-tableau-pile");
-    //   const pileId = `tableauPile${cardTableauPile}`;
-    //   const newPile = tableauPiles[pileId].pile;
-    //   newPile.pop();
-    //   tableauPiles[pileId].update(newPile);
-    // }
+    const [face, suit] = card.split(":");
+    const targetBuildPile = `build_${suit}`;
+    if (
+      canCardBeAddedToBuildPile(card, state[targetBuildPile].sequence, suit)
+    ) {
+      const originPileId = event.target.closest("ol").dataset.pile;
+      dispatch({
+        type: "moveCardBetweenPiles",
+        sourcePile: originPileId,
+        targetPile: targetBuildPile,
+        card,
+        isFaceUp: true,
+        isDraggable: true,
+      });
+      dispatch({
+        targetPile: targetBuildPile,
+        type: "makeOnlyLastCardInPileDraggable",
+      });
+      dispatch({
+        targetPile: originPileId,
+        type: "makeLastCardInPileFaceUp",
+      });
+      dispatch({
+        targetPile: originPileId,
+        type: "makeAllFaceUpCardsInPileDraggable",
+      });
+    }
   };
   return (
     <>
@@ -41,13 +59,13 @@ export default function Tableau(props: TableauProps) {
               id={`tableau_${i}`}
             >
               <Pile
-                doubleClickHandler={cardDoubleClickHandler}
+                doubleClickHandlerForLastCard={cardDoubleClickHandler}
                 pileId={`tableau_${i}`}
+                droppable={true}
               />
             </div>,
           );
         }
-
         return elements;
       })()}
     </>
