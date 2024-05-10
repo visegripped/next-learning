@@ -4,9 +4,7 @@ import { PilesInterface, PileIdsInterface } from "@/app/types/solitaire.types";
 export type ActionInterface = {
   type:
     | "moveCardBetweenPiles"
-    | "removeCardFromPile"
-    | "movePile"
-    | "movePileByCardId"
+    | "movePileToAnotherPile"
     | "makeOnlyLastCardInPileDraggable"
     | "makeAllFaceUpCardsInPileDraggable"
     | "makeLastCardInPileFaceUp";
@@ -23,19 +21,32 @@ export const solitaireReducer = (
 ) => {
   const newState = { ...state };
   const { sourcePile, targetPile, card, isFaceUp, isDraggable } = action;
-  console.log(`useReducer - ${action.type}
-  card: ${card}
-  sourcePile: ${sourcePile}
-  targetPile: ${targetPile}
-  `);
-  const source = newState[sourcePile];
-  const target = newState[targetPile];
+  // console.log(`useReducer - ${action.type}
+  // card: ${card}
+  // sourcePile: ${sourcePile}
+  // targetPile: ${targetPile}
+  // `);
+  const source = sourcePile ? newState[sourcePile] : undefined;
+  const target = targetPile ? newState[targetPile] : undefined;
   switch (action.type) {
+    case "movePileToAnotherPile":
+      if(source.sequence.length) {
+        target.sequence = [...source.sequence.reverse()];
+        source.sequence = [];
+        source.meta = {};
+        target.sequence.forEach((card) => {
+          target.meta[card] = {
+            isFaceUp,
+            isDraggable
+          }
+        })
+      }
+      return newState;
     case "moveCardBetweenPiles":
       const sourceIndex = source.sequence.indexOf(card);
-      console.log(
-        `SourceIndex: ${sourceIndex} and sourceSequenceLength: ${source.sequence.length}`,
-      );
+      // console.log(
+      //   `SourceIndex: ${sourceIndex} and sourceSequenceLength: ${source.sequence.length}`,
+      // );
       if (target.sequence.indexOf(card) >= 0) {
         //card is already in target pile
       } else if (
@@ -43,7 +54,6 @@ export const solitaireReducer = (
         sourceIndex < source.sequence.length - 1
       ) {
         // need to move a series of cards, preserving order.
-        console.log(" move a series of cards - not done yet. ");
         for (let i = sourceIndex; i < source.sequence.length - 1; i++) {
           const newCard = source.sequence[i];
           newState[targetPile].sequence.push(newCard);
@@ -90,9 +100,6 @@ export const solitaireReducer = (
         target.meta[lastCard].isFaceUp = true;
       }
       return newState;
-    case "removeCardFromPile":
-      return false;
-      break;
     default:
       return state;
   }
