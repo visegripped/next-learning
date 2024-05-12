@@ -1,12 +1,12 @@
 import { useReducer, useState } from "react";
 import { PilesInterface, PileIdsInterface } from "@/app/types/solitaire.types";
 
-export type ReducerTypesInterface = 
-    | "moveCardBetweenPiles"
-    | "movePileToAnotherPile"
-    | "makeOnlyLastCardInPileDraggable"
-    | "makeAllFaceUpCardsInPileDraggable"
-    | "makeLastCardInPileFaceUp";
+export type ReducerTypesInterface =
+  | "moveCardBetweenPiles"
+  | "movePileToAnotherPile"
+  | "makeOnlyLastCardInPileDraggable"
+  | "makeAllFaceUpCardsInPileDraggable"
+  | "makeLastCardInPileFaceUp";
 
 export type ActionInterface = {
   type: ReducerTypesInterface;
@@ -18,22 +18,37 @@ export type ActionInterface = {
 };
 
 export const validateReducerActionsByType = (action: ActionInterface) => {
-  if(!action.type) {
+  if (!action.type) {
     return false;
   }
   switch (action.type) {
     case "moveCardBetweenPiles":
-      return !!(action.sourcePile && action.targetPile && action.card && action.isFaceUp !== undefined && action.isDraggable !== undefined)
+      return !!(
+        action.sourcePile &&
+        action.targetPile &&
+        action.card &&
+        action.isFaceUp !== undefined &&
+        action.isDraggable !== undefined
+      );
     case "movePileToAnotherPile":
-      return !!(action.sourcePile && action.targetPile && action.isFaceUp !== undefined && action.isDraggable !== undefined)
+      return !!(
+        action.sourcePile &&
+        action.targetPile &&
+        action.isFaceUp !== undefined &&
+        action.isDraggable !== undefined
+      );
     case "makeOnlyLastCardInPileDraggable":
     case "makeAllFaceUpCardsInPileDraggable":
     case "makeLastCardInPileFaceUp":
-      return !!(action.targetPile && action.isFaceUp !== undefined && action.isDraggable !== undefined)
+      return !!(
+        action.targetPile &&
+        action.isFaceUp !== undefined &&
+        action.isDraggable !== undefined
+      );
     default:
       return false;
   }
-}
+};
 
 export const solitaireReducer = (
   state: PilesInterface,
@@ -46,23 +61,23 @@ export const solitaireReducer = (
   // sourcePile: ${sourcePile}
   // targetPile: ${targetPile}
   // `);
-  if(!validateReducerActionsByType(action)) {
+  if (!validateReducerActionsByType(action)) {
     return false;
   }
-  const source = sourcePile ? newState[sourcePile] : {sequence: [], meta: {}};
-  const target = targetPile ? newState[targetPile] : {sequence: [], meta: {}};
+  const source = sourcePile ? newState[sourcePile] : { sequence: [], meta: {} };
+  const target = targetPile ? newState[targetPile] : { sequence: [], meta: {} };
   switch (action.type) {
     case "movePileToAnotherPile":
-      if(source.sequence.length) {
+      if (source.sequence.length) {
         target.sequence = [...source.sequence.reverse()];
         source.sequence = [];
         source.meta = {};
         target.sequence.forEach((card) => {
           target.meta[card] = {
             isFaceUp,
-            isDraggable
-          }
-        })
+            isDraggable,
+          };
+        });
       }
       return newState;
     case "moveCardBetweenPiles":

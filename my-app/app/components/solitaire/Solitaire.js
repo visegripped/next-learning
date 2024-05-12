@@ -22,7 +22,7 @@ import { DndContext, useSensors, useSensor, MouseSensor } from "@dnd-kit/core";
 // event typings: https://www.tderflinger.com/en/event-typings-of-react-with-type-script
 
 export default function Solitaire(props) {
-  console.log(` These are the props for solitaire: `, props);
+  // console.log(` These are the props for solitaire: `, props);
   // we can use localStorage to save games in progress.
   const fullDeck = buildFullDeck(suits, cards);
   const shuffledDeck = shuffleArray(fullDeck);
@@ -200,16 +200,16 @@ export default function Solitaire(props) {
   };
 
   const emptyDeckClickHandler = () => {
-    if(pilesState.deck.sequence.length === 0) {
+    if (pilesState.deck.sequence.length === 0) {
       pilesDispatch({
         type: "movePileToAnotherPile",
-        sourcePile : 'waste',
-        targetPile : 'deck',
+        sourcePile: "waste",
+        targetPile: "deck",
         isFaceUp: false,
         isDraggable: false,
       });
     }
-  }
+  };
   return (
     <SolitaireContext.Provider value={providerState}>
       <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
@@ -224,7 +224,10 @@ export default function Solitaire(props) {
             />
           </div>
           {/* The deck */}
-          <div className="bg-slate-600 grow mx-2 justify-center" onDoubleClick={emptyDeckClickHandler}>
+          <div
+            className="bg-slate-600 grow mx-2 justify-center"
+            onDoubleClick={emptyDeckClickHandler}
+          >
             <Pile pileId="deck" clickHandlerForLastCard={deckClickHandler} />
           </div>
         </section>
