@@ -22,7 +22,7 @@ import { DndContext, useSensors, useSensor, MouseSensor } from "@dnd-kit/core";
 // event typings: https://www.tderflinger.com/en/event-typings-of-react-with-type-script
 
 export default function Solitaire(props) {
-  // console.log(` These are the props for home: `, props);
+  console.log(` These are the props for solitaire: `, props);
   // we can use localStorage to save games in progress.
   const fullDeck = buildFullDeck(suits, cards);
   const shuffledDeck = shuffleArray(fullDeck);
@@ -121,7 +121,6 @@ export default function Solitaire(props) {
   };
 
   const handleDragEnd = (event) => {
-    console.log("BEGIN handleDragEnd");
     const sourcePile = event.activatorEvent.target
       .closest("ol")
       .getAttribute("data-pile");
@@ -130,16 +129,16 @@ export default function Solitaire(props) {
     const [targetPileType, targetPileData] = targetPile.split("_"); // targetPileData could be the suit OR the tableau id.
     const card = event.active.id;
     const action = `${sourcePileType}2${targetPileType}`;
-    console.log(
-      `Got to dragEnd:
-      TargetPile: ${targetPile}
-      targetPileType: ${targetPileType}
-      sourcePile: ${sourcePile}
-      sourcePileType: ${sourcePileType}
-      Card: ${card}
-      action: ${action}
-      `,
-    );
+    // console.log(
+    //   `Got to dragEnd:
+    //   TargetPile: ${targetPile}
+    //   targetPileType: ${targetPileType}
+    //   sourcePile: ${sourcePile}
+    //   sourcePileType: ${sourcePileType}
+    //   Card: ${card}
+    //   action: ${action}
+    //   `,
+    // );
 
     switch (action) {
       case "waste2build":
@@ -202,7 +201,6 @@ export default function Solitaire(props) {
 
   const emptyDeckClickHandler = () => {
     if(pilesState.deck.sequence.length === 0) {
-      console.log(' WOOT !')
       pilesDispatch({
         type: "movePileToAnotherPile",
         sourcePile : 'waste',
