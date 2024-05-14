@@ -106,21 +106,22 @@ describe("makeOnlyLastCardInPileDraggable", () => {
         card: undefined,
       }),
     ).toEqual(true);
-  });
-
-  test("Returns false if any of the required params are missing", () => {
-    expect(
-      validateReducerActionsByType({
-        ...makeOnlyLastCardInPileDraggableSampleAction,
-        isDraggable: undefined,
-      }),
-    ).toEqual(false);
     expect(
       validateReducerActionsByType({
         ...makeOnlyLastCardInPileDraggableSampleAction,
         isFaceUp: undefined,
       }),
-    ).toEqual(false);
+    ).toEqual(true);
+    expect(
+      validateReducerActionsByType({
+        ...makeOnlyLastCardInPileDraggableSampleAction,
+        isDraggable: undefined,
+      }),
+    ).toEqual(true);
+  });
+
+  test("Returns false if any of the required params are missing", () => {
+
     expect(
       validateReducerActionsByType({
         ...makeOnlyLastCardInPileDraggableSampleAction,
@@ -153,21 +154,24 @@ describe("makeAllFaceUpCardsInPileDraggable", () => {
         card: undefined,
       }),
     ).toEqual(true);
-  });
 
-  test("Returns false if any of the required params are missing", () => {
-    expect(
-      validateReducerActionsByType({
-        ...makeAllFaceUpCardsInPileDraggableSampleAction,
-        isDraggable: undefined,
-      }),
-    ).toEqual(false);
     expect(
       validateReducerActionsByType({
         ...makeAllFaceUpCardsInPileDraggableSampleAction,
         isFaceUp: undefined,
       }),
-    ).toEqual(false);
+    ).toEqual(true);
+    expect(
+      validateReducerActionsByType({
+        ...makeAllFaceUpCardsInPileDraggableSampleAction,
+        isDraggable: undefined,
+      }),
+    ).toEqual(true);
+  });
+
+  test("Returns false if any of the required params are missing", () => {
+
+
     expect(
       validateReducerActionsByType({
         ...makeAllFaceUpCardsInPileDraggableSampleAction,
@@ -198,21 +202,23 @@ describe("makeLastCardInPileFaceUp", () => {
         card: undefined,
       }),
     ).toEqual(true);
-  });
-
-  test("Returns false if any of the required params are missing", () => {
-    expect(
-      validateReducerActionsByType({
-        ...makeLastCardInPileFaceUpSampleAction,
-        isDraggable: undefined,
-      }),
-    ).toEqual(false);
     expect(
       validateReducerActionsByType({
         ...makeLastCardInPileFaceUpSampleAction,
         isFaceUp: undefined,
       }),
-    ).toEqual(false);
+    ).toEqual(true);
+    expect(
+      validateReducerActionsByType({
+        ...makeLastCardInPileFaceUpSampleAction,
+        isDraggable: undefined,
+      }),
+    ).toEqual(true);
+  });
+
+  test("Returns false if any of the required params are missing", () => {
+
+
     expect(
       validateReducerActionsByType({
         ...makeLastCardInPileFaceUpSampleAction,

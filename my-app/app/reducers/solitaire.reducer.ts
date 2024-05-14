@@ -40,11 +40,7 @@ export const validateReducerActionsByType = (action: ActionInterface) => {
     case "makeOnlyLastCardInPileDraggable":
     case "makeAllFaceUpCardsInPileDraggable":
     case "makeLastCardInPileFaceUp":
-      return !!(
-        action.targetPile &&
-        action.isFaceUp !== undefined &&
-        action.isDraggable !== undefined
-      );
+      return !!(action.targetPile);
     default:
       return false;
   }
@@ -56,12 +52,13 @@ export const solitaireReducer = (
 ) => {
   const newState = { ...state };
   const { sourcePile, targetPile, card, isFaceUp, isDraggable } = action;
-  // console.log(`useReducer - ${action.type}
-  // card: ${card}
-  // sourcePile: ${sourcePile}
-  // targetPile: ${targetPile}
-  // `);
+  console.log(`useReducer - ${action.type}
+  card: ${card}
+  sourcePile: ${sourcePile}
+  targetPile: ${targetPile}
+  `);
   if (!validateReducerActionsByType(action)) {
+    console.log(`${action.type} did not pass validation`)
     return false;
   }
   const source = sourcePile ? newState[sourcePile] : { sequence: [], meta: {} };
@@ -81,6 +78,7 @@ export const solitaireReducer = (
       }
       return newState;
     case "moveCardBetweenPiles":
+      // console.log('BEGIN movecardbetweenpiles')
       const sourceIndex = source.sequence.indexOf(card);
       // console.log(
       //   `SourceIndex: ${sourceIndex} and sourceSequenceLength: ${source.sequence.length}`,
@@ -114,8 +112,10 @@ export const solitaireReducer = (
           isDraggable,
         };
       }
+      // console.log('MoveCardBetweenPiles new state: ', newState)
       return newState;
     case "makeOnlyLastCardInPileDraggable":
+      // console.log('BEGIN makeOnlyLastCardInPileDraggable')
       target.sequence.forEach((card, index, arr) => {
         if (index === arr.length - 1) {
           target.meta[card].isDraggable = true;
@@ -123,20 +123,25 @@ export const solitaireReducer = (
           target.meta[card].isDraggable = false;
         }
       });
+      // console.log('makeOnlyLastCardInPileDraggable new state: ', newState)
       return newState;
     case "makeAllFaceUpCardsInPileDraggable":
+      // console.log('BEGIN makeAllFaceUpCardsInPileDraggable')
       target.sequence.forEach((card) => {
         if (target.meta[card].isFaceUp === true) {
           target.meta[card].isDraggable = true;
         }
       });
+      // console.log('makeAllFaceUpCardsInPileDraggable new state: ', newState)
       return newState;
     case "makeLastCardInPileFaceUp":
+      // console.log('BEGIN makeLastCardInPileFaceUp')
       //pile could be empty.
       if (target?.sequence?.length) {
         const lastCard = target.sequence[target.sequence.length - 1];
         target.meta[lastCard].isFaceUp = true;
       }
+      // console.log('makeLastCardInPileFaceUp new state: ', newState)
       return newState;
     default:
       return state;
