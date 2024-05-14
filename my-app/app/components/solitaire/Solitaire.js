@@ -213,25 +213,26 @@ export default function Solitaire(props) {
   return (
     <SolitaireContext.Provider value={providerState}>
       <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-        <section className="mt-20 bg-slate-800 size-full flex">
+        <section className="mt-20 bg-slate-800 grid grid-cols-7 gap-4">
           {/* Building piles - todo: componetize this */}
           <BuildPiles />
           {/* The waste */}
-          <div className="bg-slate-600 grow mx-2 justify-center">
+          <div className="bg-slate-600 flex">
             <Pile
               doubleClickHandlerForLastCard={wasteDoubleClickHandler}
               pileId="waste"
             />
           </div>
+          <div></div> {/* empty column so top and tableau align */}
           {/* The deck */}
           <div
-            className="bg-slate-600 grow mx-2 justify-center"
+            className="bg-slate-600 flex"
             onDoubleClick={emptyDeckClickHandler}
           >
             <Pile pileId="deck" clickHandlerForLastCard={deckClickHandler} />
           </div>
         </section>
-        <section className="mt-20 bg-slate-800 size-full flex">
+        <section className="mt-20 bg-slate-800 grid grid-cols-7 gap-4">
           <Tableau
           // tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
           // buildingPiles={buildingPiles}

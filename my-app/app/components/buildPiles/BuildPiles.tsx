@@ -14,7 +14,7 @@ export default function BuildPiles() {
           const suit = suits[i];
           elements.push(
             <div
-              className="bg-slate-600 grow mx-2 justify-center"
+              className="bg-slate-600 flex flex-col" //remove flex col when the H2 is removed.
               key={`suits-${i}`}
             >
               <h2>{suit}</h2>

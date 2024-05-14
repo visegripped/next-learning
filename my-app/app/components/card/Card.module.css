@@ -1,6 +1,7 @@
 .card__back {
-  /* background-image: url(/card-back.jpg); */
-  /* height: 150px; */
+  background: url(/card-back.jpg) no-repeat;
+  background-size: cover;
+  height: 20px;
   /* width: 70px; */
 }
 

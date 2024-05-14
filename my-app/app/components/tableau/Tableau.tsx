@@ -53,7 +53,7 @@ export default function Tableau() {
         for (let i = 0; i < numTableaus; i++) {
           elements.push(
             <div
-              className="bg-slate-600 grow mx-2 justify-center"
+              className="bg-slate-600 flex"
               data-tableau-pile={i}
               key={`tableau_${i}`}
               id={`tableau_${i}`}

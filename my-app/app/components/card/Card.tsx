@@ -63,7 +63,7 @@ export default function Tableau(props: CardProps) {
         doubleClickHandler(e, card);
       }}
     >
-      {isFaceUp ? card : `card back ${card}`}{" "}
+      {isFaceUp ? card : ``}
       {/* here for testing purposes only */}
     </div>
   );
