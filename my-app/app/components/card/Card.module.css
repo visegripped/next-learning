@@ -1,12 +1,76 @@
 .card__back {
-  background: url(/card-back.jpg) no-repeat;
+  background: url(/card-back-red.png) no-repeat;
   background-size: cover;
   height: 20px;
   /* width: 70px; */
 }
 
 .card__front {
-  /* background-image: url(/card-sprite.jpg); */
-  /* height: 150px; */
-  /* width: 70px; */
+  background: url(/card-sprite.png) no-repeat;
+  /* background-size: cover; */
+  color: green;
+  height: 314px;
+  width: 223px;
+}
+
+.diamond {
+  background-position-y: -630px;
+}
+
+.heart {
+  background-position-y: 0;
+}
+
+.club {
+  background-position-y: -945px;
+}
+
+.spade {
+  background-position-y: -315px;
+}
+
+
+.ace {
+  background-position-x: 0;
+}
+
+.two {
+  background-position-x: -225px;
+}
+.three {
+  background-position-x: -450px;
+}
+
+.four {
+  background-position-x: -675px;
+}
+.five {
+  background-position-x: -900px;
+}
+.six {
+  background-position-x: -1125px;
+}
+.seven {
+  background-position-x: -1350px;
+}
+
+.eight {
+  background-position-x: -1575px;
+}
+.nine {
+  background-position-x: -1800px;
+}
+
+.ten {
+  background-position-x: -2025px;
+}
+.jack {
+  background-position-x: -2250px;
+}
+
+.queen {
+  background-position-x: -2475px;
+}
+.king {
+  background-position-x: -2700px;
 }

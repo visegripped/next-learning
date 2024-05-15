@@ -34,7 +34,16 @@ export default function Tableau(props: CardProps) {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
       }
     : undefined;
-  const cssClasses = styles[`card__${isFaceUp ? "front" : "back"}`];
+  const isFaceUpClassname = styles[`card__${isFaceUp ? "front" : "back"}`];
+  let suitClassName = '';
+  let faceClassName = '';
+  if(isFaceUp) {
+    const [face, suit] = card.split(":");
+    suitClassName = styles[suit];
+    faceClassName = styles[face];
+  }
+
+  let cssClasses = `${isFaceUpClassname} ${faceClassName} ${suitClassName}`;
 
   return isDraggable ? (
     <div
@@ -51,7 +60,7 @@ export default function Tableau(props: CardProps) {
       {...listeners}
       {...attributes}
     >
-      {card}
+      {/* {card} */}
     </div>
   ) : (
     <div
@@ -63,7 +72,7 @@ export default function Tableau(props: CardProps) {
         doubleClickHandler(e, card);
       }}
     >
-      {isFaceUp ? card : ``}
+      {/* {isFaceUp ? card : ``} */}
       {/* here for testing purposes only */}
     </div>
   );

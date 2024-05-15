@@ -40,7 +40,7 @@ export const validateReducerActionsByType = (action: ActionInterface) => {
     case "makeOnlyLastCardInPileDraggable":
     case "makeAllFaceUpCardsInPileDraggable":
     case "makeLastCardInPileFaceUp":
-      return !!(action.targetPile);
+      return !!action.targetPile;
     default:
       return false;
   }
@@ -58,7 +58,7 @@ export const solitaireReducer = (
   targetPile: ${targetPile}
   `);
   if (!validateReducerActionsByType(action)) {
-    console.log(`${action.type} did not pass validation`)
+    console.log(`${action.type} did not pass validation`);
     return false;
   }
   const source = sourcePile ? newState[sourcePile] : { sequence: [], meta: {} };
