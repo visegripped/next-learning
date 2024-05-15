@@ -1,14 +1,11 @@
 .card__back {
   background: url(/card-back-red.png) no-repeat;
   background-size: cover;
-  height: 20px;
-  /* width: 70px; */
+  height: 35px;
 }
 
 .card__front {
   background: url(/card-sprite.png) no-repeat;
-  /* background-size: cover; */
-  color: green;
   height: 314px;
   width: 223px;
 }
@@ -28,7 +25,6 @@
 .spade {
   background-position-y: -315px;
 }
-
 
 .ace {
   background-position-x: 0;
@@ -64,6 +60,7 @@
 .ten {
   background-position-x: -2025px;
 }
+
 .jack {
   background-position-x: -2250px;
 }
@@ -73,4 +70,4 @@
 }
 .king {
   background-position-x: -2700px;
-}
+} 

@@ -5,6 +5,7 @@ import { useSolitaireContext } from "@/app/context/Solitaire.context";
 import { ActionInterface } from "@/app/reducers/solitaire.reducer";
 import { canCardBeAddedToBuildPile } from "@/app/utilities";
 import { PilesInterface } from "@/app/types/solitaire.types";
+import styles from './Tableau.module.css'
 
 export default function Tableau() {
   const {
@@ -61,6 +62,7 @@ export default function Tableau() {
               <Pile
                 doubleClickHandlerForLastCard={cardDoubleClickHandler}
                 pileId={`tableau_${i}`}
+                cssClassName={styles.cards}
                 droppable={true}
               />
             </div>,

@@ -60,7 +60,7 @@ export default function Tableau(props: CardProps) {
       {...listeners}
       {...attributes}
     >
-      {/* {card} */}
+      {card}
     </div>
   ) : (
     <div
@@ -72,7 +72,7 @@ export default function Tableau(props: CardProps) {
         doubleClickHandler(e, card);
       }}
     >
-      {/* {isFaceUp ? card : ``} */}
+      {isFaceUp ? card : ``}
       {/* here for testing purposes only */}
     </div>
   );

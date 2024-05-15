@@ -12,6 +12,7 @@ import {
 import Tableau from "@/app/components/tableau/Tableau";
 import Pile from "@/app/components/pile/Pile";
 import BuildPiles from "@/app/components/buildPiles/BuildPiles";
+import WastePile from "@/app/components/wastePile/WastePile";
 import solitaireReducer from "@/app/reducers/solitaire.reducer";
 import SolitaireContext from "@/app/context/Solitaire.context";
 import { DndContext, useSensors, useSensor, MouseSensor } from "@dnd-kit/core";
@@ -95,30 +96,6 @@ export default function Solitaire(props) {
       type: "makeOnlyLastCardInPileDraggable",
     });
   };
-  const wasteDoubleClickHandler = (event, card) => {
-    const [face, suit] = card.split(":");
-    const targetBuildPile = `build_${suit}`;
-    if (
-      canCardBeAddedToBuildPile(
-        card,
-        pilesState[targetBuildPile].sequence,
-        suit,
-      )
-    ) {
-      pilesDispatch({
-        type: "moveCardBetweenPiles",
-        sourcePile: "waste",
-        targetPile: targetBuildPile,
-        card,
-        isFaceUp: true,
-        isDraggable: true,
-      });
-      pilesDispatch({
-        targetPile: targetBuildPile,
-        type: "makeOnlyLastCardInPileDraggable",
-      });
-    }
-  };
 
   const handleDragEnd = (event) => {
     const sourcePile = event.activatorEvent.target
@@ -129,16 +106,16 @@ export default function Solitaire(props) {
     const [targetPileType, targetPileData] = targetPile.split("_"); // targetPileData could be the suit OR the tableau id.
     const card = event.active.id;
     const action = `${sourcePileType}2${targetPileType}`;
-    // console.log(
-    //   `Got to dragEnd:
-    //   TargetPile: ${targetPile}
-    //   targetPileType: ${targetPileType}
-    //   sourcePile: ${sourcePile}
-    //   sourcePileType: ${sourcePileType}
-    //   Card: ${card}
-    //   action: ${action}
-    //   `,
-    // );
+    console.log(
+      `Got to dragEnd:
+      TargetPile: ${targetPile}
+      targetPileType: ${targetPileType}
+      sourcePile: ${sourcePile}
+      sourcePileType: ${sourcePileType}
+      Card: ${card}
+      action: ${action}
+      `,
+    );
 
     switch (action) {
       case "waste2build":
@@ -218,10 +195,7 @@ export default function Solitaire(props) {
           <BuildPiles />
           {/* The waste */}
           <div className="bg-slate-600 flex">
-            <Pile
-              doubleClickHandlerForLastCard={wasteDoubleClickHandler}
-              pileId="waste"
-            />
+            <WastePile />
           </div>
           <div></div> {/* empty column so top and tableau align */}
           {/* The deck */}
