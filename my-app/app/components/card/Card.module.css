@@ -8,6 +8,8 @@
   background: url(/card-sprite.png) no-repeat;
   height: 314px;
   width: 223px;
+  /* background-size: cover; */
+  overflow: hidden;
 }
 
 .diamond {
