@@ -23,6 +23,10 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 
+## features to add
+ * An undo button (1 move only)
+ * Counter that shows number of moves
+ * A 'you win' screen
+
 
 ## Bugs
- * In the tableau, stack three or more cards in a row, then move them to another tableau.  Only two get moved.

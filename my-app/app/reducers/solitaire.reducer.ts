@@ -78,20 +78,22 @@ export const solitaireReducer = (
       }
       return newState;
     case "moveCardBetweenPiles":
-      // console.log('BEGIN movecardbetweenpiles')
+      console.log('BEGIN movecardbetweenpiles')
       const sourceIndex = source.sequence.indexOf(card);
-      // console.log(
-      //   `SourceIndex: ${sourceIndex} and sourceSequenceLength: ${source.sequence.length}`,
-      // );
+      console.log(
+        `SourceIndex: ${sourceIndex} and sourceSequenceLength: ${source.sequence.length}`,
+      );
       if (target.sequence.indexOf(card) >= 0) {
         //card is already in target pile
+        console.log(`${card} is already in target sequence`)
       } else if (
         targetPile?.includes("tableau") &&
         sourceIndex < source.sequence.length - 1
       ) {
         // need to move a series of cards, preserving order.
-        for (let i = sourceIndex; i < source.sequence.length - 1; i++) {
+        for (let i = sourceIndex; i <= source.sequence.length - 1; i++) {
           const newCard = source.sequence[i];
+          console.log(` -> attempting to move ${newCard} and part of a multi-card tableau move`)
           newState[targetPile].sequence.push(newCard);
           newState[targetPile].meta[newCard] = {
             isFaceUp: true,
@@ -103,6 +105,7 @@ export const solitaireReducer = (
           sourceIndex,
           source.sequence.length - sourceIndex,
         );
+        console.log(`${sourcePile} sequence: `, source.sequence)
       } else {
         source.sequence.splice(sourceIndex, 1);
         delete newState[sourcePile].meta[card];

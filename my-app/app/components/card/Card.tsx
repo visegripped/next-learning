@@ -31,16 +31,16 @@ export function CardSVG(props: SVGProps) {
   const xPosForFace = {
     ace: '0%',
     two: '8.33%',
-    three: '16.66%',
+    three: '16.68%',
     four: '25%',
     five: '33.33%',
-    six: '41.66%',
+    six: '41.68%',
     seven: '50%',
     eight: '58.33%',
-    nine: '66.68%', //violates the pattern
+    nine: '66.68%',
     ten: '75%',
     jack: '83.33%',
-    queen: '91.69%', //violates the pattern
+    queen: '91.68%',
     king: '100%',
   }
 
