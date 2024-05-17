@@ -31,16 +31,16 @@ export function CardSVG(props: SVGProps) {
   const xPosForFace = {
     ace: '0%',
     two: '8.33%',
-    three: '16.65%',
+    three: '16.66%',
     four: '25%',
-    five: '33.35%',
-    six: '41.67%',
+    five: '33.33%',
+    six: '41.66%',
     seven: '50%',
-    eight: '58.32%',
-    nine: '66.68%',
+    eight: '58.33%',
+    nine: '66.68%', //violates the pattern
     ten: '75%',
     jack: '83.33%',
-    queen: '91.69%',
+    queen: '91.69%', //violates the pattern
     king: '100%',
   }
 
@@ -97,7 +97,6 @@ export default function Card(props: CardProps) {
       }}
       {...(isDraggable && { style: draggableStyle, ref: setNodeRef, ...listeners, ...attributes })}
     >
-        {card}
       {isFaceUp ? <CardSVG card={card}></CardSVG> : <></>}
     </div>
   )
