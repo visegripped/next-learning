@@ -40,7 +40,7 @@ export const validateReducerActionsByType = (action: ActionInterface) => {
     case "makeOnlyLastCardInPileDraggable":
     case "makeAllFaceUpCardsInPileDraggable":
     case "makeLastCardInPileFaceUp":
-      return !!action.targetPile;
+      return !!(action.targetPile);
     default:
       return false;
   }
