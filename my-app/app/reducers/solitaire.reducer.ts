@@ -40,7 +40,7 @@ export const validateReducerActionsByType = (action: ActionInterface) => {
     case "makeOnlyLastCardInPileDraggable":
     case "makeAllFaceUpCardsInPileDraggable":
     case "makeLastCardInPileFaceUp":
-      return !!(action.targetPile);
+      return !!action.targetPile;
     default:
       return false;
   }
@@ -52,15 +52,16 @@ export const solitaireReducer = (
 ) => {
   const newState = { ...state };
   const { sourcePile, targetPile, card, isFaceUp, isDraggable } = action;
-  console.log(`useReducer - ${action.type}
-  card: ${card}
-  sourcePile: ${sourcePile}
-  targetPile: ${targetPile}
-  `);
+  // console.log(`useReducer - ${action.type}
+  // card: ${card}
+  // sourcePile: ${sourcePile}
+  // targetPile: ${targetPile}
+  // `);
   if (!validateReducerActionsByType(action)) {
     console.log(`${action.type} did not pass validation`);
     return false;
   }
+
   const source = sourcePile ? newState[sourcePile] : { sequence: [], meta: {} };
   const target = targetPile ? newState[targetPile] : { sequence: [], meta: {} };
   switch (action.type) {
@@ -78,14 +79,14 @@ export const solitaireReducer = (
       }
       return newState;
     case "moveCardBetweenPiles":
-      console.log('BEGIN movecardbetweenpiles')
+      // console.log("BEGIN movecardbetweenpiles");
       const sourceIndex = source.sequence.indexOf(card);
-      console.log(
-        `SourceIndex: ${sourceIndex} and sourceSequenceLength: ${source.sequence.length}`,
-      );
+      // console.log(
+      //   `SourceIndex: ${sourceIndex} and sourceSequenceLength: ${source.sequence.length}`,
+      // );
       if (target.sequence.indexOf(card) >= 0) {
         //card is already in target pile
-        console.log(`${card} is already in target sequence`)
+        // console.log(`${card} is already in target sequence`);
       } else if (
         targetPile?.includes("tableau") &&
         sourceIndex < source.sequence.length - 1
@@ -93,7 +94,9 @@ export const solitaireReducer = (
         // need to move a series of cards, preserving order.
         for (let i = sourceIndex; i <= source.sequence.length - 1; i++) {
           const newCard = source.sequence[i];
-          console.log(` -> attempting to move ${newCard} and part of a multi-card tableau move`)
+          // console.log(
+          //   ` -> attempting to move ${newCard} and part of a multi-card tableau move`,
+          // );
           newState[targetPile].sequence.push(newCard);
           newState[targetPile].meta[newCard] = {
             isFaceUp: true,
@@ -105,7 +108,7 @@ export const solitaireReducer = (
           sourceIndex,
           source.sequence.length - sourceIndex,
         );
-        console.log(`${sourcePile} sequence: `, source.sequence)
+        // console.log(`${sourcePile} sequence: `, source.sequence);
       } else {
         source.sequence.splice(sourceIndex, 1);
         delete newState[sourcePile].meta[card];

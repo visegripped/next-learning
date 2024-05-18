@@ -169,8 +169,6 @@ describe("makeAllFaceUpCardsInPileDraggable", () => {
   });
 
   test("Returns false if any of the required params are missing", () => {
-
-
     expect(
       validateReducerActionsByType({
         ...makeAllFaceUpCardsInPileDraggableSampleAction,
@@ -216,8 +214,6 @@ describe("makeLastCardInPileFaceUp", () => {
   });
 
   test("Returns false if any of the required params are missing", () => {
-
-
     expect(
       validateReducerActionsByType({
         ...makeLastCardInPileFaceUpSampleAction,

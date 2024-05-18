@@ -23,9 +23,9 @@ const canCardBeAddedToBuildPile = (
   if (topCardOfSequenceFace) {
     topCardOfSequenceValue = cards[topCardOfSequenceFace];
   }
-  console.log(`canCardBeAddedToBuildStack: 
-  suit: ${suit} which should match targetBuildPileSuit: ${targetBuildPileSuit}
-  value: ${cardValue} which should be sequential to topCardOfSequenceValue: ${topCardOfSequenceValue}`);
+  // console.log(`canCardBeAddedToBuildStack:
+  // suit: ${suit} which should match targetBuildPileSuit: ${targetBuildPileSuit}
+  // value: ${cardValue} which should be sequential to topCardOfSequenceValue: ${topCardOfSequenceValue}`);
   if (
     suit === targetBuildPileSuit &&
     cardValue - 1 === topCardOfSequenceValue

@@ -18,7 +18,7 @@ export default function Pile(props: PileProps) {
     clickHandlerForLastCard,
     pileId,
     droppable = false,
-    cssClassName = ''
+    cssClassName = "",
   } = props;
   const { state, dispatch } = useSolitaireContext();
   const { isOver, setNodeRef } = useDroppable({
