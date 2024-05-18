@@ -16,7 +16,8 @@ const canCardBeAddedToTableauPile = (
   ];
   let topCardOfSequenceValue = 14;
   const cardValue = cards[cardFace];
-  const topCardOfSequence = targetSequence[targetSequence.length - 1] || ":";
+  const topCardOfSequence =
+    targetSequence[targetSequence.length - 1] || (":" as CardFaceInterface);
   const [topCardOfSequenceFace, topCardOfSequenceSuit] =
     topCardOfSequence.split(":") as [CardFaceInterface, SuitInterface];
   if (topCardOfSequenceFace) {
@@ -30,9 +31,9 @@ const canCardBeAddedToTableauPile = (
     return false;
   }
 
-  console.log(`canCardBeAddedToTableauPile: 
-  suit: ${suit} which should be a different color than targetBuildPileSuit: ${topCardOfSequenceSuit}
-  value: ${cardValue} which should be sequential to topCardOfSequenceValue: ${topCardOfSequenceValue}`);
+  // console.log(`canCardBeAddedToTableauPile:
+  // suit: ${suit} which should be a different color than targetBuildPileSuit: ${topCardOfSequenceSuit}
+  // value: ${cardValue} which should be sequential to topCardOfSequenceValue: ${topCardOfSequenceValue}`);
 
   return true;
 };

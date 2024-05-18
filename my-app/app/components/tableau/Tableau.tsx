@@ -5,7 +5,7 @@ import { useSolitaireContext } from "@/app/context/Solitaire.context";
 import { ActionInterface } from "@/app/reducers/solitaire.reducer";
 import { canCardBeAddedToBuildPile } from "@/app/utilities";
 import { PilesInterface } from "@/app/types/solitaire.types";
-import styles from './Tableau.module.css'
+import styles from "./Tableau.module.css";
 
 export default function Tableau() {
   const {

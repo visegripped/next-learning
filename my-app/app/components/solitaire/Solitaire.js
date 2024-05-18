@@ -17,11 +17,6 @@ import solitaireReducer from "@/app/reducers/solitaire.reducer";
 import SolitaireContext from "@/app/context/Solitaire.context";
 import { DndContext, useSensors, useSensor, MouseSensor } from "@dnd-kit/core";
 
-//solitaire anatomy: https://www.britannica.com/topic/solitaire-card-game
-//reducer tutorial: https://blog.logrocket.com/react-usereducer-hook-ultimate-guide/
-// context/reducer: https://stackoverflow.com/questions/63687178/sharing-states-between-two-components-with-usereducer
-// event typings: https://www.tderflinger.com/en/event-typings-of-react-with-type-script
-
 export default function Solitaire(props) {
   // console.log(` These are the props for solitaire: `, props);
   // we can use localStorage to save games in progress.
@@ -106,16 +101,16 @@ export default function Solitaire(props) {
     const [targetPileType, targetPileData] = targetPile.split("_"); // targetPileData could be the suit OR the tableau id.
     const card = event.active.id;
     const action = `${sourcePileType}2${targetPileType}`;
-    console.log(
-      `Got to dragEnd:
-      TargetPile: ${targetPile}
-      targetPileType: ${targetPileType}
-      sourcePile: ${sourcePile}
-      sourcePileType: ${sourcePileType}
-      Card: ${card}
-      action: ${action}
-      `,
-    );
+    // console.log(
+    //   `Got to dragEnd:
+    //   TargetPile: ${targetPile}
+    //   targetPileType: ${targetPileType}
+    //   sourcePile: ${sourcePile}
+    //   sourcePileType: ${sourcePileType}
+    //   Card: ${card}
+    //   action: ${action}
+    //   `,
+    // );
 
     switch (action) {
       case "waste2build":

@@ -15,7 +15,7 @@ export default function Home() {
 
           {/* <div className='flex-none'><DealButton /></div> */}
         </section>
-{/* 
+        {/* 
         <section className="mt-20 bg-slate-800 grid grid-cols-7 gap-4">
           <div className="bg-slate-600 flex">
           <svg viewBox="0 0 5 7" style={{
@@ -39,7 +39,6 @@ export default function Home() {
           <div className="bg-slate-600 flex"></div>
           <div className="bg-slate-600 flex"></div>
           </section> */}
-
 
         <Solitaire />
 
