@@ -5,6 +5,7 @@ import { useSolitaireContext } from "@/app/context/Solitaire.context";
 import { ActionInterface } from "@/app/reducers/solitaire.reducer";
 import { canCardBeAddedToBuildPile } from "@/app/utilities";
 import { PilesInterface } from "@/app/types/solitaire.types";
+import styles from './Tableau.module.css'
 
 export default function Tableau() {
   const {
@@ -53,7 +54,7 @@ export default function Tableau() {
         for (let i = 0; i < numTableaus; i++) {
           elements.push(
             <div
-              className="bg-slate-600 grow mx-2 justify-center"
+              className="bg-slate-600 flex"
               data-tableau-pile={i}
               key={`tableau_${i}`}
               id={`tableau_${i}`}
@@ -61,6 +62,7 @@ export default function Tableau() {
               <Pile
                 doubleClickHandlerForLastCard={cardDoubleClickHandler}
                 pileId={`tableau_${i}`}
+                cssClassName={styles.cards}
                 droppable={true}
               />
             </div>,

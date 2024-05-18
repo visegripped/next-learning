@@ -2,17 +2,65 @@
 
 import { useDraggable } from "@dnd-kit/core";
 import styles from "./Card.module.css";
+import { CardInterface, SuitInterface, CardFaceInterface } from "@/app/types/solitaire.types";
 
 interface CardProps {
   isFaceUp: boolean;
   isDraggable: boolean;
-  card: string;
+  card: CardInterface;
   source?: string; // Do we still need this?
   doubleClickHandler: Function | undefined;
   clickHandler: Function | undefined;
 }
 
-export default function Tableau(props: CardProps) {
+interface SVGProps {
+  card: CardInterface;
+}
+
+export function CardSVG(props: SVGProps) {
+  const {card} = props;
+  const [face, suit] = card.split(':') as [CardFaceInterface, SuitInterface];
+
+  const yPosForSuits = {
+    heart: '0%',
+    spade: '33.4%',
+    diamond: '66.8%',
+    club: '100%',
+  }
+
+  const xPosForFace = {
+    ace: '0%',
+    two: '8.33%',
+    three: '16.68%',
+    four: '25%',
+    five: '33.33%',
+    six: '41.68%',
+    seven: '50%',
+    eight: '58.33%',
+    nine: '66.68%',
+    ten: '75%',
+    jack: '83.33%',
+    queen: '91.68%',
+    king: '100%',
+  }
+
+
+  return (
+    <svg viewBox="0 0 5 7" style={{
+      backgroundSize: '1300% 400%',
+      backgroundPosition: `${xPosForFace[face]} ${yPosForSuits[suit]} `,
+      backgroundImage: "url('card-sprite.png')",
+      height: 'auto',
+      width: '100%',
+      overflow: 'hidden',
+      backgroundRepeat: 'no-repeat',
+      boxSizing: 'border-box',
+    }}></svg>
+  )
+}
+
+
+export default function Card(props: CardProps) {
   const {
     isFaceUp,
     isDraggable,
@@ -34,11 +82,12 @@ export default function Tableau(props: CardProps) {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
       }
     : undefined;
-  const cssClasses = styles[`card__${isFaceUp ? "front" : "back"}`];
 
-  return isDraggable ? (
+    
+
+  return (
     <div
-      className={cssClasses}
+      className={isFaceUp ? '' : styles.card__back}
       data-source={source}
       onClick={(e) => {
         clickHandler(e, card);
@@ -46,25 +95,9 @@ export default function Tableau(props: CardProps) {
       onDoubleClick={(e) => {
         doubleClickHandler(e, card);
       }}
-      style={draggableStyle}
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
+      {...(isDraggable && { style: draggableStyle, ref: setNodeRef, ...listeners, ...attributes })}
     >
-      {card}
+      {isFaceUp ? <CardSVG card={card}></CardSVG> : <></>}
     </div>
-  ) : (
-    <div
-      className={cssClasses}
-      onClick={(e) => {
-        clickHandler(e, card);
-      }}
-      onDoubleClick={(e) => {
-        doubleClickHandler(e, card);
-      }}
-    >
-      {isFaceUp ? card : `card back ${card}`}{" "}
-      {/* here for testing purposes only */}
-    </div>
-  );
+  )
 }

@@ -10,6 +10,7 @@ interface PileProps {
   clickHandlerForLastCard?: Function;
   pileId: PileIdsInterface;
   droppable?: boolean;
+  cssClassName: string;
 }
 export default function Pile(props: PileProps) {
   const {
@@ -17,6 +18,7 @@ export default function Pile(props: PileProps) {
     clickHandlerForLastCard,
     pileId,
     droppable = false,
+    cssClassName = ''
   } = props;
   const { state, dispatch } = useSolitaireContext();
   const { isOver, setNodeRef } = useDroppable({
@@ -28,14 +30,14 @@ export default function Pile(props: PileProps) {
   const pile = state[pileId];
   return (
     <ol
-      className="list-decimal list-inside border p-4"
+      className={`list-inside border flex-1 ${cssClassName}`} // list-decimal
       style={dragOverStyle}
       ref={droppable ? setNodeRef : () => {}}
       data-pile={pileId}
     >
       {(() => {
         const elements = [];
-        const sequence = pile.sequence || [];
+        const sequence = pile?.sequence || [];
         for (let i = 0; i < sequence.length; i++) {
           const card = sequence[i];
           const { isFaceUp, isDraggable } = pile.meta[card];

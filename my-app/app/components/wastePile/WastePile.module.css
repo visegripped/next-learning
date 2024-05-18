@@ -1,0 +1,7 @@
+.cards li {
+  position: absolute;
+}
+
+.cards {
+  position: relative;
+}

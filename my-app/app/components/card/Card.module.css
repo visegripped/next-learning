@@ -1,11 +1,5 @@
 .card__back {
-  /* background-image: url(/card-back.jpg); */
-  /* height: 150px; */
-  /* width: 70px; */
-}
-
-.card__front {
-  /* background-image: url(/card-sprite.jpg); */
-  /* height: 150px; */
-  /* width: 70px; */
+  background: url(/card-back-red.png) no-repeat;
+  background-size: cover;
+  height: 35px;
 }

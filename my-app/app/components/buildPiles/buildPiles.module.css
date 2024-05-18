@@ -1,0 +1,7 @@
+.cards li {
+  height: 35px;
+}
+
+.cards li:last-child {
+  height: unset;
+}
