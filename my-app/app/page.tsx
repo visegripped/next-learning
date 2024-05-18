@@ -1,9 +1,6 @@
 // import Image from "next/image";
 import Solitaire from "./components/solitaire/Solitaire";
-import {
-  shuffleArray,
-  buildFullDeck,
-} from "@/app/utilities";
+import { shuffleArray, buildFullDeck } from "@/app/utilities";
 
 const fullDeck = buildFullDeck();
 const shuffledDeck = shuffleArray(fullDeck);
