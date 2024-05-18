@@ -1,24 +1,35 @@
 "use client";
-import { useReducer } from "react";
-import { suits, cards } from "@/app/constants.mjs";
+import { useReducer, Dispatch } from "react";
 import {
-  shuffleArray,
   buildTableau,
-  buildFullDeck,
   buildDeck,
   canCardBeAddedToBuildPile,
   canCardBeAddedToTableauPile,
 } from "@/app/utilities";
 import Tableau from "@/app/components/tableau/Tableau";
-import Pile from "@/app/components/pile/Pile";
 import BuildPiles from "@/app/components/buildPiles/BuildPiles";
 import WastePile from "@/app/components/wastePile/WastePile";
 import DeckPile from "@/app/components/deckPile/DeckPile";
 import solitaireReducer from "@/app/reducers/solitaire.reducer";
 import SolitaireContext from "@/app/context/Solitaire.context";
-import { DndContext, useSensors, useSensor, MouseSensor } from "@dnd-kit/core";
+import {
+  DndContext,
+  useSensors,
+  useSensor,
+  MouseSensor,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  CardFaceInterface,
+  PilesInterface,
+  CardInterface,
+} from "@/app/types/solitaire.types";
 
-export default function Solitaire(props) {
+interface SolitaireProps {
+  shuffledDeck: CardFaceInterface[];
+}
+
+export default function Solitaire(props: SolitaireProps) {
   // console.log(` These are the props for solitaire: `, props);
   const { shuffledDeck } = props;
   // we can use localStorage to save games in progress.
@@ -33,7 +44,10 @@ export default function Solitaire(props) {
   } = buildTableau(shuffledDeck);
 
   const deck = buildDeck(shuffledDeck);
-  const [pilesState, pilesDispatch] = useReducer(solitaireReducer, {
+  const [state, dispatch]: {
+    state: PilesInterface;
+    dispatch: Dispatch<ActionInterface>;
+  } = useReducer(solitaireReducer, {
     deck: deck,
     waste: {
       sequence: [],
@@ -65,8 +79,8 @@ export default function Solitaire(props) {
   });
 
   const providerState = {
-    state: pilesState,
-    dispatch: pilesDispatch,
+    state,
+    dispatch,
   };
   // This applies a minimum drag distance. Helps to make sure click/doubleclick are recognized.
   const sensors = useSensors(
@@ -75,16 +89,27 @@ export default function Solitaire(props) {
       activationConstraint: { distance: 25 },
     }),
   );
-  // console.log(" -> Piles state: ", pilesState);
+  // console.log(" -> Piles state: ", state);
 
-  const handleDragEnd = (event) => {
-    const sourcePile = event.activatorEvent.target
-      .closest("ol")
-      .getAttribute("data-pile");
+  const handleDragEnd = (event: DragEndEvent) => {
+    const dragTarget = event?.activatorEvent?.target;
+    if (!dragTarget) {
+      console.log(
+        " -> DragEndEvent had no target (event.activatorEvent.target) detected.",
+      );
+      return false;
+    }
+    const sourcePile = dragTarget.closest("ol").getAttribute("data-pile");
     const [sourcePileType] = sourcePile.split("_");
-    const targetPile = event.over?.id;
+    const targetPile = event?.over?.id;
+    if (!targetPile) {
+      console.log(
+        " -> DragEndEvent had no targetPile (event.over.id) detected.",
+      );
+      return false;
+    }
     const [targetPileType, targetPileData] = targetPile.split("_"); // targetPileData could be the suit OR the tableau id.
-    const card = event.active.id;
+    const card = event.active.id as CardInterface;
     const action = `${sourcePileType}2${targetPileType}`;
     // console.log(
     //   `Got to dragEnd:
@@ -103,11 +128,11 @@ export default function Solitaire(props) {
         if (
           canCardBeAddedToBuildPile(
             card,
-            pilesState[targetPile].sequence,
+            state[targetPile].sequence,
             targetPileData,
           )
         ) {
-          pilesDispatch({
+          dispatch({
             type: "moveCardBetweenPiles",
             sourcePile,
             targetPile,
@@ -116,11 +141,11 @@ export default function Solitaire(props) {
             isDraggable: true,
           });
           if (action === "tableau2build") {
-            pilesDispatch({
+            dispatch({
               type: "makeLastCardInPileFaceUp",
               targetPile: sourcePile,
             });
-            pilesDispatch({
+            dispatch({
               type: "makeAllFaceUpCardsInPileDraggable",
               targetPile: sourcePile,
             });
@@ -130,10 +155,8 @@ export default function Solitaire(props) {
       case "tableau2tableau":
       case "build2tableau":
       case "waste2tableau":
-        if (
-          canCardBeAddedToTableauPile(card, pilesState[targetPile].sequence)
-        ) {
-          pilesDispatch({
+        if (canCardBeAddedToTableauPile(card, state[targetPile].sequence)) {
+          dispatch({
             type: "moveCardBetweenPiles",
             sourcePile,
             targetPile,
@@ -141,11 +164,11 @@ export default function Solitaire(props) {
             isFaceUp: true,
             isDraggable: true,
           });
-          pilesDispatch({
+          dispatch({
             type: "makeLastCardInPileFaceUp",
             targetPile: sourcePile,
           });
-          pilesDispatch({
+          dispatch({
             type: "makeAllFaceUpCardsInPileDraggable",
             targetPile: sourcePile,
           });
