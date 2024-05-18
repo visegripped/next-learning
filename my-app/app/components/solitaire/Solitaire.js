@@ -13,6 +13,7 @@ import Tableau from "@/app/components/tableau/Tableau";
 import Pile from "@/app/components/pile/Pile";
 import BuildPiles from "@/app/components/buildPiles/BuildPiles";
 import WastePile from "@/app/components/wastePile/WastePile";
+import DeckPile from "@/app/components/deckPile/DeckPile";
 import solitaireReducer from "@/app/reducers/solitaire.reducer";
 import SolitaireContext from "@/app/context/Solitaire.context";
 import { DndContext, useSensors, useSensor, MouseSensor } from "@dnd-kit/core";
@@ -67,7 +68,7 @@ export default function Solitaire(props) {
     state: pilesState,
     dispatch: pilesDispatch,
   };
-
+  // This applies a minimum drag distance. Helps to make sure click/doubleclick are recognized.
   const sensors = useSensors(
     useSensor(MouseSensor, {
       // onActivation: (event) => console.log("onActivation", event), // Here!
@@ -75,21 +76,6 @@ export default function Solitaire(props) {
     }),
   );
   // console.log(" -> Piles state: ", pilesState);
-
-  const deckClickHandler = (event, card) => {
-    pilesDispatch({
-      type: "moveCardBetweenPiles",
-      sourcePile: "deck",
-      targetPile: "waste",
-      card,
-      isFaceUp: true,
-      isDraggable: true,
-    });
-    pilesDispatch({
-      targetPile: "waste",
-      type: "makeOnlyLastCardInPileDraggable",
-    });
-  };
 
   const handleDragEnd = (event) => {
     const sourcePile = event.activatorEvent.target
@@ -170,41 +156,19 @@ export default function Solitaire(props) {
     }
   };
 
-  const emptyDeckClickHandler = () => {
-    if (pilesState.deck.sequence.length === 0) {
-      pilesDispatch({
-        type: "movePileToAnotherPile",
-        sourcePile: "waste",
-        targetPile: "deck",
-        isFaceUp: false,
-        isDraggable: false,
-      });
-    }
-  };
   return (
     <SolitaireContext.Provider value={providerState}>
       <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
         <section className="mt-20 bg-slate-800 grid grid-cols-7 gap-4">
           {/* Building piles - todo: componetize this */}
           <BuildPiles />
-          {/* The waste */}
-          <div className="bg-slate-600 flex">
-            <WastePile />
-          </div>
           <div></div> {/* empty column so top and tableau align */}
-          {/* The deck */}
-          <div
-            className="bg-slate-600 flex"
-            onDoubleClick={emptyDeckClickHandler}
-          >
-            <Pile pileId="deck" clickHandlerForLastCard={deckClickHandler} />
-          </div>
+          <WastePile />
+          <DeckPile />
         </section>
+
         <section className="mt-20 bg-slate-800 grid grid-cols-7 gap-4">
-          <Tableau
-          // tryAddingCardToBuildingPile={tryAddingCardToBuildingPile}
-          // buildingPiles={buildingPiles}
-          />
+          <Tableau />
         </section>
       </DndContext>
     </SolitaireContext.Provider>

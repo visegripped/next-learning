@@ -1,0 +1,6 @@
+.cards li {
+  display: none;
+}
+.cards li:last-child {
+  display: block;
+}

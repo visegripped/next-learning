@@ -10,7 +10,7 @@ interface PileProps {
   clickHandlerForLastCard?: Function;
   pileId: PileIdsInterface;
   droppable?: boolean;
-  cssClassName: string;
+  cssClassName?: string;
 }
 export default function Pile(props: PileProps) {
   const {

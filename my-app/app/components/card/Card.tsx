@@ -1,7 +1,7 @@
 "use client";
 
 import { useDraggable } from "@dnd-kit/core";
-import styles from "./Card.module.css";
+// import styles from "./Card.module.css";
 import {
   CardInterface,
   SuitInterface,
@@ -90,7 +90,6 @@ export default function Card(props: CardProps) {
 
   return (
     <div
-      className={isFaceUp ? "" : styles.card__back}
       data-source={source}
       onClick={(e) => {
         clickHandler(e, card);
@@ -105,7 +104,23 @@ export default function Card(props: CardProps) {
         ...attributes,
       })}
     >
-      {isFaceUp ? <CardSVG card={card} /> : <></>}
+      {isFaceUp ? (
+        <CardSVG card={card}></CardSVG>
+      ) : (
+        <svg
+          viewBox="0 0 5 7"
+          style={{
+            backgroundSize: "100% 100%",
+            backgroundPosition: `0% 0%`,
+            backgroundImage: "url('card-back-red.png')",
+            height: "auto",
+            width: "100%",
+            overflow: "hidden",
+            backgroundRepeat: "no-repeat",
+            boxSizing: "border-box",
+          }}
+        ></svg>
+      )}
     </div>
   );
 }

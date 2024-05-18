@@ -42,10 +42,12 @@ export default function WastePile() {
     }
   };
   return (
-    <Pile
-      cssClassName={styles.cards}
-      doubleClickHandlerForLastCard={wasteDoubleClickHandler}
-      pileId="waste"
-    />
+    <div className="bg-slate-600 flex">
+      <Pile
+        cssClassName={styles.cards}
+        doubleClickHandlerForLastCard={wasteDoubleClickHandler}
+        pileId="waste"
+      />
+    </div>
   );
 }
