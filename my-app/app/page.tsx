@@ -1,5 +1,9 @@
 // import Image from "next/image";
 import Solitaire from "./components/solitaire/Solitaire";
+import { shuffleArray, buildFullDeck } from "@/app/utilities";
+
+const fullDeck = buildFullDeck();
+const shuffledDeck = shuffleArray(fullDeck);
 
 export default function Home() {
   return (
@@ -11,36 +15,10 @@ export default function Home() {
       <div className="hidden md:block">
         <section className="flex">
           <h1 className="grow">Welcome to Solitaire</h1>
-          {/* https://codesandbox.io/p/sandbox/responsive-css-sprite-zjyrr?file=%2Fsrc%2FApp.js */}
-
           {/* <div className='flex-none'><DealButton /></div> */}
         </section>
-        {/* 
-        <section className="mt-20 bg-slate-800 grid grid-cols-7 gap-4">
-          <div className="bg-slate-600 flex">
-          <svg viewBox="0 0 5 7" style={{
-            backgroundSize: '1300% 400%',
-            backgroundPosition: '0% 0% ',
-            backgroundImage: "url('card-sprite.png')",
-            height: 'auto',
-            width: '100%',
-            // aspectRatio: '3/6',
-            overflow: 'hidden',
-            backgroundRepeat: 'no-repeat',
-            boxSizing: 'border-box',
-            // objectFit: 'none',
-            // objectPosition: '10% 10%',
-            // transformOrigin: "top left",
-            // transform: 'scale(110%)',
-          }}></svg>
-          </div>
-          <div className="bg-slate-600 flex"></div>
-          <div className="bg-slate-600 flex"></div>
-          <div className="bg-slate-600 flex"></div>
-          <div className="bg-slate-600 flex"></div>
-          </section> */}
 
-        <Solitaire />
+        <Solitaire shuffledDeck={shuffledDeck} />
 
         {/* <a
           href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"

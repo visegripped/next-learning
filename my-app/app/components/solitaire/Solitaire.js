@@ -19,9 +19,8 @@ import { DndContext, useSensors, useSensor, MouseSensor } from "@dnd-kit/core";
 
 export default function Solitaire(props) {
   // console.log(` These are the props for solitaire: `, props);
+  const { shuffledDeck } = props;
   // we can use localStorage to save games in progress.
-  const fullDeck = buildFullDeck(suits, cards);
-  const shuffledDeck = shuffleArray(fullDeck);
   const {
     tableau_0,
     tableau_1,
