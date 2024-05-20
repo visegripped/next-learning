@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 import { expect, test, vi } from "vitest";
-import { render, screen, fireEvent } from '@testing-library/react';
-import Card, { CardSVG } from './Card';
+import { render, screen, fireEvent } from "@testing-library/react";
+import Card, { CardSVG } from "./Card";
 
-describe('Card component', () => {
-  const mockCard = 'ace:heart'; // Mock card data
+describe("Card component", () => {
+  const mockCard = "ace:heart"; // Mock card data
 
-  test('renders with face up', () => {
+  test("renders with face up", () => {
     const { getByTestId } = render(
       <Card
         isFaceUp={true}
@@ -14,15 +14,15 @@ describe('Card component', () => {
         card={mockCard}
         doubleClickHandler={vi.fn()}
         clickHandler={vi.fn()}
-      />
+      />,
     );
 
-    const cardElement = getByTestId('card_ace:heart');
+    const cardElement = getByTestId("card_ace:heart");
     expect(cardElement).toBeInTheDocument();
-    expect(cardElement).toHaveStyle('backgroundImage: url(\'card-sprite.png\')');
+    expect(cardElement).toHaveStyle("backgroundImage: url('card-sprite.png')");
   });
 
-  test('renders with face down', () => {
+  test("renders with face down", () => {
     const { getByTestId } = render(
       <Card
         isFaceUp={false}
@@ -30,15 +30,17 @@ describe('Card component', () => {
         card={mockCard}
         doubleClickHandler={vi.fn()}
         clickHandler={vi.fn()}
-      />
+      />,
     );
 
-    const cardElement = getByTestId('card_facedown');
+    const cardElement = getByTestId("card_facedown");
     expect(cardElement).toBeInTheDocument();
-    expect(cardElement).toHaveStyle('backgroundImage: url(\'card-back-red.png\')');
+    expect(cardElement).toHaveStyle(
+      "backgroundImage: url('card-back-red.png')",
+    );
   });
 
-  test('calls click handler on click', () => {
+  test("calls click handler on click", () => {
     const clickHandler = vi.fn();
     const { getByTestId } = render(
       <Card
@@ -47,15 +49,15 @@ describe('Card component', () => {
         card={mockCard}
         doubleClickHandler={vi.fn()}
         clickHandler={clickHandler}
-      />
+      />,
     );
 
-    const cardElement = getByTestId('container_ace:heart');
+    const cardElement = getByTestId("container_ace:heart");
     fireEvent.click(cardElement);
     expect(clickHandler).toHaveBeenCalled();
   });
 
-  test('calls double click handler on double click', () => {
+  test("calls double click handler on double click", () => {
     const doubleClickHandler = vi.fn();
     const { getByTestId } = render(
       <Card
@@ -64,22 +66,21 @@ describe('Card component', () => {
         card={mockCard}
         doubleClickHandler={doubleClickHandler}
         clickHandler={vi.fn()}
-      />
+      />,
     );
 
-    const cardElement = getByTestId('card_ace:heart');
+    const cardElement = getByTestId("card_ace:heart");
     fireEvent.doubleClick(cardElement);
     expect(doubleClickHandler).toHaveBeenCalled();
   });
 });
 
+describe("CardSVG component", () => {
+  const mockCard = "ace:heart"; // Mock card data
 
-describe('CardSVG component', () => {
-  const mockCard = 'ace:heart'; // Mock card data
-
-  test('renders correctly', () => {
+  test("renders correctly", () => {
     const { getByTestId } = render(<CardSVG card={mockCard} />);
-    const svgElement = getByTestId('card_ace:heart');
+    const svgElement = getByTestId("card_ace:heart");
     expect(svgElement).toBeInTheDocument();
   });
 });

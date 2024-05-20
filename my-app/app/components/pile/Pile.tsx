@@ -34,6 +34,7 @@ export default function Pile(props: PileProps) {
       style={dragOverStyle}
       ref={droppable ? setNodeRef : () => {}}
       data-pile={pileId}
+      data-testid={`pile_${pileId}`}
     >
       {(() => {
         const elements = [];

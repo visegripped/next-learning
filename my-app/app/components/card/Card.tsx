@@ -92,7 +92,7 @@ export default function Card(props: CardProps) {
   return (
     <div
       data-source={source}
-      data-testid={`container_${isFaceUp ? card : 'facedown'}`}
+      data-testid={`container_${isFaceUp ? card : "facedown"}`}
       onClick={(e) => {
         clickHandler(e, card);
       }}
@@ -111,7 +111,7 @@ export default function Card(props: CardProps) {
       ) : (
         <svg
           viewBox="0 0 5 7"
-          data-testid='card_facedown'
+          data-testid="card_facedown"
           style={{
             backgroundSize: "100% 100%",
             backgroundPosition: `0% 0%`,

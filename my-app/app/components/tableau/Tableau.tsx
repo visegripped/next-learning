@@ -4,7 +4,12 @@ import Pile from "@/app/components/pile/Pile";
 import { useSolitaireContext } from "@/app/context/Solitaire.context";
 import { ActionInterface } from "@/app/reducers/solitaire.reducer";
 import { canCardBeAddedToBuildPile } from "@/app/utilities";
-import { PilesInterface, CardInterface, PileIdsInterface, SuitInterface } from "@/app/types/solitaire.types";
+import {
+  PilesInterface,
+  CardInterface,
+  PileIdsInterface,
+  SuitInterface,
+} from "@/app/types/solitaire.types";
 import styles from "./Tableau.module.css";
 
 export default function Tableau() {
@@ -18,7 +23,7 @@ export default function Tableau() {
     event: React.BaseSyntheticEvent,
     card: CardInterface,
   ) => {
-    const suit  = card.split(":")[1] as SuitInterface;
+    const suit = card.split(":")[1] as SuitInterface;
     const targetBuildPile = `build_${suit}` as PileIdsInterface;
     if (
       canCardBeAddedToBuildPile(card, state[targetBuildPile].sequence, suit)
@@ -52,7 +57,7 @@ export default function Tableau() {
         const elements = [];
         const numTableaus = 7;
         for (let i = 0; i < numTableaus; i++) {
-          const pileId = `tableau_${i}` as PileIdsInterface
+          const pileId = `tableau_${i}` as PileIdsInterface;
           elements.push(
             <div
               className="bg-slate-600 flex"
