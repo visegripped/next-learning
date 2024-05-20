@@ -5,3 +5,25 @@
 .cards li:last-child {
   display: block;
 }
+
+.pile {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50%;
+}
+
+.diamond {
+  background-image: url("/diamond.png");
+}
+
+.spade {
+  background-image: url("/spade.png");
+}
+
+.heart {
+  background-image: url("/heart.png");
+}
+
+.club {
+  background-image: url("/club.png");
+}
