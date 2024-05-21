@@ -44,7 +44,7 @@ export default function DeckPile() {
   };
 
   return (
-    <div className="bg-slate-600 flex" onDoubleClick={emptyDeckClickHandler}>
+    <div className="bg-slate-600 flex" onDoubleClick={emptyDeckClickHandler} data-testid='container_deck'>
       <Pile
         pileId="deck"
         clickHandlerForLastCard={deckClickHandler}
