@@ -33,6 +33,7 @@ export default function Pile(props: PileProps) {
       className={`list-inside border flex-1 ${cssClassName}`} // list-decimal
       style={dragOverStyle}
       ref={droppable ? setNodeRef : () => {}}
+      data-is-droppable={droppable ? true : ''}
       data-pile={pileId}
       data-testid={`pile_${pileId}`}
     >
