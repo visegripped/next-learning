@@ -404,6 +404,8 @@ describe("solitaireReducer", () => {
 
 
     
+
+
     const state = {
       ...initialState,
     };

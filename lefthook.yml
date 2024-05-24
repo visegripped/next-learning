@@ -2,7 +2,7 @@ pre-commit:
   commands:
     commitzen:
       interactive: true
-      run: cd my-app && pnpm run prettier {staged_files}
+      run: cd my-app && pnpm run prettier
       env:
         LEFTHOOK: 0
 
