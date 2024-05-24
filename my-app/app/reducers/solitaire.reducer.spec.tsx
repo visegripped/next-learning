@@ -401,11 +401,6 @@ describe("solitaireReducer", () => {
       type: "unsupported_action",
     };
 
-
-
-    
-
-
     const state = {
       ...initialState,
     };

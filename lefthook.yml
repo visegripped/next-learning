@@ -3,6 +3,7 @@ pre-commit:
     commitzen:
       interactive: true
       run: cd my-app && pnpm run prettier
+      stage_fixed: true
       env:
         LEFTHOOK: 0
 
