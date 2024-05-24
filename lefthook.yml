@@ -2,7 +2,7 @@ prepare-commit-msg:
   commands:
     commitzen:
       interactive: true
-      run: pnpm run prettier
+      run: cd my-app && pnpm run prettier
       env:
         LEFTHOOK: 0
 
