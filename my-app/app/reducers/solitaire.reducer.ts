@@ -59,7 +59,7 @@ export const solitaireReducer = (
   // `);
   if (!validateReducerActionsByType(action)) {
     console.log(`${action.type} did not pass validation`);
-    return "INTENTIONALLY WRONG";
+    return state;
   }
 
   const source = sourcePile ? newState[sourcePile] : { sequence: [], meta: {} };
