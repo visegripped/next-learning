@@ -7,6 +7,14 @@ pre-commit:
       env:
         LEFTHOOK: 0
 
+pre-push:
+  commands:
+    commitzen:
+      interactive: true
+      run: cd my-app && pnpm run test
+      stage_fixed: true
+      env:
+        LEFTHOOK: 0
 
 # EXAMPLE USAGE:
 #
