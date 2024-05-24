@@ -19,6 +19,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@evilmartians/lefthook": "^1.6.12",
     "@playwright/test": "^1.41.2",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^15.0.7",
