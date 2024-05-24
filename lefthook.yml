@@ -1,8 +1,8 @@
-prepare-commit-msg:
+pre-commit:
   commands:
     commitzen:
       interactive: true
-      run: cd my-app && pnpm run prettier
+      run: cd my-app && pnpm run prettier {staged_files}
       env:
         LEFTHOOK: 0
 
