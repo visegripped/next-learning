@@ -1,16 +1,16 @@
-import { render } from '@testing-library/react';
-import { expect, test, vi, afterEach, beforeEach, describe } from 'vitest';
-import BuildPiles from '@/app/components/BuildPiles';
-import { useSolitaireContext } from '@/app/context/Solitaire.context';
-import { suits } from '@/app/constants.mjs';
-import { PilesInterface } from '@/app/types/solitaire.types';
+import { render } from "@testing-library/react";
+import { expect, test, vi, afterEach, beforeEach, describe } from "vitest";
+import BuildPiles from "@/app/components/BuildPiles";
+import { useSolitaireContext } from "@/app/context/Solitaire.context";
+import { suits } from "@/app/constants.mjs";
+import { PilesInterface } from "@/app/types/solitaire.types";
 
 // Mock the useSolitaireContext hook
-vi.mock('@/app/context/Solitaire.context', () => ({
+vi.mock("@/app/context/Solitaire.context", () => ({
   useSolitaireContext: vi.fn(),
 }));
 
-describe('BuildPiles Component', () => {
+describe("BuildPiles Component", () => {
   let stateMock: PilesInterface;
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('BuildPiles Component', () => {
     vi.clearAllMocks();
   });
 
-  test('should render the correct number of build piles based on suits', () => {
+  test("should render the correct number of build piles based on suits", () => {
     const { getByTestId } = render(<BuildPiles />);
 
     suits.forEach((suit) => {
@@ -40,22 +40,24 @@ describe('BuildPiles Component', () => {
     });
   });
 
-  test('each build pile should have a Pile component with correct props', () => {
+  test("each build pile should have a Pile component with correct props", () => {
     const { getAllByTestId } = render(<BuildPiles />);
 
-    const pileContainers = getAllByTestId((_, element) => element?.dataset?.testid?.startsWith('container_'));
+    const pileContainers = getAllByTestId((_, element) =>
+      element?.dataset?.testid?.startsWith("container_"),
+    );
     pileContainers.forEach((container, index) => {
-      const pile = container.querySelector('ol');
-      expect(pile).toHaveAttribute('data-pile', `build_${suits[index]}`);
+      const pile = container.querySelector("ol");
+      expect(pile).toHaveAttribute("data-pile", `build_${suits[index]}`);
     });
   });
 
-  test('should apply correct styles to each build pile container', () => {
+  test("should apply correct styles to each build pile container", () => {
     const { getByTestId } = render(<BuildPiles />);
 
     suits.forEach((suit) => {
       const container = getByTestId(`container_${suit}`);
-      expect(container).toHaveClass('bg-slate-600', 'flex', 'flex-col');
+      expect(container).toHaveClass("bg-slate-600", "flex", "flex-col");
       expect(container).toHaveClass(`_pile_99ebf9`);
       expect(container).toHaveClass(`_${suit}_99ebf9`);
     });

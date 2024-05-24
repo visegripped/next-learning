@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch, useContext, createContext } from "react";
 import { ActionInterface } from "@/app/reducers/solitaire.reducer";
 import { PilesInterface } from "../types/solitaire.types";
 
@@ -7,10 +7,10 @@ interface IContextProps {
   dispatch: Dispatch<ActionInterface>;
 }
 
-const SolitaireContext = React.createContext({} as IContextProps);
+const SolitaireContext = createContext({} as IContextProps);
 
 export function useSolitaireContext() {
-  return React.useContext(SolitaireContext);
+  return useContext(SolitaireContext);
 }
 
 export default SolitaireContext;

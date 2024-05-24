@@ -182,7 +182,10 @@ export default function Solitaire(props: SolitaireProps) {
   return (
     <SolitaireContext.Provider value={providerState}>
       <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-        <section className="mt-20 bg-slate-800 grid grid-cols-7 gap-4">
+        <section
+          className="mt-20 bg-slate-800 grid grid-cols-7 gap-4"
+          data-testid="solitaire"
+        >
           {/* Building piles - todo: componetize this */}
           <BuildPiles />
           <div></div> {/* empty column so top and tableau align */}
