@@ -4,17 +4,12 @@ pre-commit:
       interactive: true
       run: cd my-app && pnpm run prettier
       stage_fixed: true
-      env:
-        LEFTHOOK: 0
 
 pre-push:
   commands:
-    commitzen:
-      interactive: true
+    "Run tests":
       run: cd my-app && pnpm run test
-      stage_fixed: true
-      env:
-        LEFTHOOK: 0
+
 
 # EXAMPLE USAGE:
 #
