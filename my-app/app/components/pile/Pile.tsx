@@ -2,7 +2,7 @@
 
 import Card from "@/app/components/card/Card";
 import { useDroppable } from "@dnd-kit/core";
-import { PileIdsInterface } from "@/app/types/solitaire.types";
+import { PileIdsInterface, CardInterface } from "@/app/types/solitaire.types";
 import { useSolitaireContext } from "@/app/context/Solitaire.context";
 
 interface PileProps {
@@ -33,6 +33,7 @@ export default function Pile(props: PileProps) {
       className={`list-inside border flex-1 ${cssClassName}`} // list-decimal
       style={dragOverStyle}
       ref={droppable ? setNodeRef : () => {}}
+      data-is-droppable={droppable ? true : ""}
       data-pile={pileId}
       data-testid={`pile_${pileId}`}
     >
@@ -40,7 +41,7 @@ export default function Pile(props: PileProps) {
         const elements = [];
         const sequence = pile?.sequence || [];
         for (let i = 0; i < sequence.length; i++) {
-          const card = sequence[i];
+          const card = sequence[i] as CardInterface;
           const { isFaceUp, isDraggable } = pile.meta[card];
           elements.push(
             <li key={`${pileId}-${card}`}>
