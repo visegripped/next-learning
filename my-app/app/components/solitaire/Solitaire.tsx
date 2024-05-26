@@ -182,14 +182,20 @@ export default function Solitaire(props: SolitaireProps) {
     }
   };
 
+  const isGameWon = (states: PilesInterface) => {
+    return !!(
+      states.build_diamond.sequence.length +
+        states.build_spade.sequence.length +
+        states.build_club.sequence.length +
+        states.build_heart.sequence.length >=
+      52
+    );
+  };
+
   return (
     <SolitaireContext.Provider value={providerState}>
       <div className="md:max-w-screen-xl ml-auto mr-auto">
-        {state.build_diamond.sequence.length +
-          state.build_spade.sequence.length +
-          state.build_club.sequence.length +
-          state.build_heart.sequence.length >=
-        52 ? (
+        {isGameWon(state) ? (
           <div className="flex flex-row justify-center bg-slate-800 items-stretch p-20">
             <h2 className="text-9xl font-bold tracking-wide text-green-500">
               You Win!

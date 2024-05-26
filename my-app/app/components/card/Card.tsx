@@ -22,7 +22,7 @@ interface SVGProps {
 }
 
 export function CardSVG(props: SVGProps) {
-  const { card } = props;
+  const { card = "" } = props;
   const [face, suit] = card.split(":") as [CardFaceInterface, SuitInterface];
 
   const yPosForSuits = {
