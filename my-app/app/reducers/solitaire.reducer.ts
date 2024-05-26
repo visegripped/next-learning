@@ -51,7 +51,8 @@ export const solitaireReducer = (
   action: ActionInterface,
 ) => {
   const newState = { ...state };
-  const { sourcePile, targetPile, card, isFaceUp, isDraggable } = action;
+  const { sourcePile, targetPile, card, isFaceUp, isDraggable } =
+    action as ActionInterface;
   // console.log(`useReducer - ${action.type}
   // card: ${card}
   // sourcePile: ${sourcePile}
@@ -72,8 +73,8 @@ export const solitaireReducer = (
         source.meta = {};
         target.sequence.forEach((card) => {
           target.meta[card] = {
-            isFaceUp,
-            isDraggable,
+            isFaceUp: isFaceUp || false,
+            isDraggable: isDraggable || false,
           };
         });
       }

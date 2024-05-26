@@ -2,6 +2,7 @@ import { render, fireEvent } from "@testing-library/react";
 import { expect, test, vi, afterEach, beforeEach, describe } from "vitest";
 import { useDroppable, useDraggable } from "@dnd-kit/core";
 import Solitaire from "@/app/components/Solitaire";
+import winnableDeck from "../../../tests/winnable-shuffled-deck.json";
 import { useSolitaireContext } from "@/app/context/Solitaire.context";
 import {
   canCardBeAddedToBuildPile,
@@ -52,12 +53,7 @@ describe("Solitaire Component", () => {
   let shuffledDeck: CardFaceInterface[];
 
   beforeEach(() => {
-    shuffledDeck = [
-      "ace:spade",
-      "two:spade",
-      "three:spade",
-      // Add more cards as needed for testing
-    ];
+    shuffledDeck = [...winnableDeck];
 
     useDroppable.mockReturnValue({
       isOver: false,
@@ -92,9 +88,9 @@ describe("Solitaire Component", () => {
   // });
 
   // test('should handle drag end event correctly', () => {
-  //   const card: CardInterface = 'ace:spade';
+  //   const card: CardInterface = 'ace:club';
   //   const sourcePile: PileIdsInterface = 'tableau_0';
-  //   const targetPile: PileIdsInterface = 'build_spade';
+  //   const targetPile: PileIdsInterface = 'build_club';
 
   //   const { getByTestId } = render(<Solitaire shuffledDeck={shuffledDeck} />);
   //   const sourceElement = getByTestId(`pile_${sourcePile}`);
@@ -118,7 +114,7 @@ describe("Solitaire Component", () => {
   test("should handle unsupported drop location", () => {
     const card: CardInterface = "ace:spade";
     const sourcePile: PileIdsInterface = "waste";
-    const targetPile: PileIdsInterface = "invalid_pile";
+    const targetPile: PileIdsInterface = "build_heart";
 
     const { getByTestId } = render(<Solitaire shuffledDeck={shuffledDeck} />);
     const sourceElement = getByTestId(`pile_${sourcePile}`);

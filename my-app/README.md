@@ -27,6 +27,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - encountered a case where the card in the waste pile was not draggable. not sure how to reproduce.
 - An undo button (1 move only)
 - Counter that shows number of moves
-- A 'you win' screen
 - Error handler/boundary
-- Add bg image to each build pile for suit and get rid of heading.
