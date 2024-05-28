@@ -3,10 +3,9 @@ import Solitaire from "./components/solitaire/Solitaire";
 import { shuffleArray, buildFullDeck } from "@/app/utilities";
 // import winnableDeck from "../tests/winnable-shuffled-deck.json";
 
-const fullDeck = buildFullDeck();
-const shuffledDeck = shuffleArray(fullDeck);
-
 export default function Home() {
+  const fullDeck = buildFullDeck();
+  const shuffledDeck = shuffleArray(fullDeck);
   return (
     <main className=" p-8">
       <div className="md:hidden">

@@ -95,6 +95,8 @@ export default function Solitaire(props: SolitaireProps) {
   // console.log(" -> Piles state: ", state);
 
   const handleDragEnd = (event: DragEndEvent) => {
+    console.log(" -> handleDragEnd");
+    console.log(event);
     const dragTarget = event?.activatorEvent?.target;
     if (!dragTarget) {
       console.log(

@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 // import { DndContext } from '@dnd-kit/core';
 import { useDroppable, useDraggable } from "@dnd-kit/core";
 import Solitaire from "./Solitaire";
@@ -96,10 +97,75 @@ describe("Solitaire Component", () => {
   });
 
   test("should initialize state correctly", () => {
-    renderWithProvider(<Solitaire shuffledDeck={shuffledDeck} />, initialState);
+    renderWithProvider(<Solitaire shuffledDeck={shuffledDeck} />, {
+      ...initialState,
+    });
+    expect(initialState.deck.sequence.length).toBe(24);
+    expect(initialState.tableau_0.sequence.length).toBe(1);
+    expect(initialState.tableau_1.sequence.length).toBe(2);
+    expect(initialState.tableau_2.sequence.length).toBe(3);
+    expect(initialState.tableau_3.sequence.length).toBe(4);
+    expect(initialState.tableau_4.sequence.length).toBe(5);
+    expect(initialState.tableau_5.sequence.length).toBe(6);
+    expect(initialState.tableau_6.sequence.length).toBe(7);
+    expect(initialState.waste.sequence.length).toBe(0);
+    expect(initialState.build_heart.sequence.length).toBe(0);
+    expect(initialState.build_spade.sequence.length).toBe(0);
+    expect(initialState.build_diamond.sequence.length).toBe(0);
+    expect(initialState.build_club.sequence.length).toBe(0);
+  });
 
-    expect(initialState.deck.sequence.length).toBe(24); // Assuming buildDeck returns an empty deck
-    expect(initialState.tableau_0.sequence.length).toBe(1); // Assuming buildTableau returns empty tableaus
+  // test("Drag and drop test", () => {
+  //   const testState = {...initialState}
+  //   renderWithProvider(<Solitaire shuffledDeck={shuffledDeck} />, testState);
+  //   const dropzone = screen.getByTestId('pile_build_club');
+  //   expect(dropzone).toBeInTheDocument();
+  //   fireEvent.drop(dropzone, {
+  //     active: {id: "ace:club",
+  //     activatorEvent : {
+  //       target: screen.getByTestId('card_ace:club')
+  //     }}
+  //   });
+  //   expect(initialState.build_spade.sequence.length).toBe(testState);
+  // })
+
+  // test("handles drag and drop between piles correctly", () => {
+  //   const testState = {...initialState}
+  //   renderWithProvider(<Solitaire shuffledDeck={shuffledDeck} />, testState);
+
+  //   const dragEvent = {
+  //     activatorEvent: {
+  //       target: {
+  //         closest: () => ({ getAttribute: () => "waste" }),
+  //       },
+  //     },
+  //     over: { id: "build_spade" },
+  //     active: { id: "ace:spade" },
+  //   };
+
+  //   fireEvent(
+  //     screen.getByTestId("solitaire"),
+  //     new CustomEvent("dragend", { detail: dragEvent }),
+  //   );
+  //   expect(testState.build_spade.sequence.length).toBe(1);
+  // });
+
+  test("should handle unsupported drop location", () => {
+    const card: CardInterface = "ace:spade";
+    const sourcePile: PileIdsInterface = "waste";
+    const targetPile: PileIdsInterface = "build_heart";
+
+    const { getByTestId } = render(<Solitaire shuffledDeck={shuffledDeck} />);
+    const sourceElement = getByTestId(`pile_${sourcePile}`);
+
+    // Mock the drag event
+    const dragEndEvent = {
+      activatorEvent: { target: sourceElement },
+      over: { id: targetPile },
+      active: { id: card },
+    };
+
+    fireEvent.dragEnd(sourceElement, dragEndEvent);
   });
 
   // TODO - fix these.
@@ -140,45 +206,4 @@ describe("Solitaire Component", () => {
   //   renderWithProvider(<Solitaire shuffledDeck={shuffledDeck} />, winningState);
   //   expect(screen.getByText('You Win!')).toBeInTheDocument();
   // });
-
-  test("handles drag and drop between piles correctly", () => {
-    renderWithProvider(<Solitaire shuffledDeck={shuffledDeck} />, initialState);
-
-    // Simulate dragging a card from waste to tableau
-    const dragEvent = {
-      activatorEvent: {
-        target: {
-          closest: () => ({ getAttribute: () => "waste" }),
-        },
-      },
-      over: { id: "tableau_0" },
-      active: { id: "AS" },
-    };
-
-    fireEvent(
-      screen.getByTestId("solitaire"),
-      new CustomEvent("dragend", { detail: dragEvent }),
-    );
-
-    // Assertions to ensure state updated correctly
-    // The actual card movements would need to be asserted based on the specific logic of the game.
-  });
-
-  test("should handle unsupported drop location", () => {
-    const card: CardInterface = "ace:spade";
-    const sourcePile: PileIdsInterface = "waste";
-    const targetPile: PileIdsInterface = "build_heart";
-
-    const { getByTestId } = render(<Solitaire shuffledDeck={shuffledDeck} />);
-    const sourceElement = getByTestId(`pile_${sourcePile}`);
-
-    // Mock the drag event
-    const dragEndEvent = {
-      activatorEvent: { target: sourceElement },
-      over: { id: targetPile },
-      active: { id: card },
-    };
-
-    fireEvent.dragEnd(sourceElement, dragEndEvent);
-  });
 });
