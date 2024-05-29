@@ -1,5 +1,5 @@
 "use client";
-import { useReducer, Dispatch, useState } from "react";
+import { useReducer, Dispatch } from "react";
 import {
   buildTableau,
   buildDeck,
@@ -45,7 +45,7 @@ export default function Solitaire(props: SolitaireProps) {
     tableau_5,
     tableau_6,
   } = buildTableau(shuffledDeck);
-  const [gameIsWon, setGameIsWon] = useState(false);
+
   const deck = buildDeck(shuffledDeck);
   const [state, dispatch]: {
     state: PilesInterface;
@@ -95,8 +95,6 @@ export default function Solitaire(props: SolitaireProps) {
   // console.log(" -> Piles state: ", state);
 
   const handleDragEnd = (event: DragEndEvent) => {
-    console.log(" -> handleDragEnd");
-    console.log(event);
     const dragTarget = event?.activatorEvent?.target;
     if (!dragTarget) {
       console.log(
