@@ -10,7 +10,9 @@ import Tableau from "@/app/components/tableau/Tableau";
 import BuildPiles from "@/app/components/buildPiles/BuildPiles";
 import WastePile from "@/app/components/wastePile/WastePile";
 import DeckPile from "@/app/components/deckPile/DeckPile";
-import solitaireReducer from "@/app/reducers/solitaire.reducer";
+import solitaireReducer, {
+  ActionInterface,
+} from "@/app/reducers/solitaire.reducer";
 import SolitaireContext from "@/app/context/Solitaire.context";
 import {
   DndContext,
@@ -30,8 +32,9 @@ interface SolitaireProps {
 }
 
 export default function Solitaire(props: SolitaireProps) {
-  // console.log(` These are the props for solitaire: `, props);
   const { shuffledDeck } = props;
+  // console.log(` These are the shuffledDeck for solitaire: ` );
+  // console.log(`["${shuffledDeck.join('",\n"')}"]`)
   // we can use localStorage to save games in progress.
   const {
     tableau_0,
@@ -179,24 +182,43 @@ export default function Solitaire(props: SolitaireProps) {
     }
   };
 
+  const isGameWon = (states: PilesInterface) => {
+    return !!(
+      states.build_diamond.sequence.length +
+        states.build_spade.sequence.length +
+        states.build_club.sequence.length +
+        states.build_heart.sequence.length >=
+      52
+    );
+  };
+
   return (
     <SolitaireContext.Provider value={providerState}>
-      <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-        <section
-          className="mt-20 bg-slate-800 grid grid-cols-7 gap-4"
-          data-testid="solitaire"
-        >
-          {/* Building piles - todo: componetize this */}
-          <BuildPiles />
-          <div></div> {/* empty column so top and tableau align */}
-          <WastePile />
-          <DeckPile />
-        </section>
+      <div className="md:max-w-screen-xl ml-auto mr-auto">
+        {isGameWon(state) ? (
+          <div className="flex flex-row justify-center bg-slate-800 items-stretch p-20">
+            <h2 className="text-9xl font-bold tracking-wide text-green-500">
+              You Win!
+            </h2>
+          </div>
+        ) : (
+          <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+            <section
+              className="mt-20 bg-slate-800 grid grid-cols-7 gap-4"
+              data-testid="solitaire"
+            >
+              <BuildPiles />
+              <div></div> {/* empty column so top and tableau align */}
+              <WastePile />
+              <DeckPile />
+            </section>
 
-        <section className="mt-20 bg-slate-800 grid grid-cols-7 gap-4">
-          <Tableau />
-        </section>
-      </DndContext>
+            <section className="mt-20 bg-slate-800 grid grid-cols-7 gap-4">
+              <Tableau />
+            </section>
+          </DndContext>
+        )}
+      </div>
     </SolitaireContext.Provider>
   );
 }

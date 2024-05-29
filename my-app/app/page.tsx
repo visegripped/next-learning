@@ -1,11 +1,11 @@
 // import Image from "next/image";
 import Solitaire from "./components/solitaire/Solitaire";
 import { shuffleArray, buildFullDeck } from "@/app/utilities";
-
-const fullDeck = buildFullDeck();
-const shuffledDeck = shuffleArray(fullDeck);
+// import winnableDeck from "../tests/winnable-shuffled-deck.json";
 
 export default function Home() {
+  const fullDeck = buildFullDeck();
+  const shuffledDeck = shuffleArray(fullDeck);
   return (
     <main className=" p-8">
       <div className="md:hidden">
