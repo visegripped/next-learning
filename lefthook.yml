@@ -1,8 +1,12 @@
 pre-commit:
   commands:
-    commitzen:
+    prettier:
       interactive: true
       run: cd my-app && pnpm run prettier
+      stage_fixed: true
+    eslint:
+      interactive: true
+      run: cd my-app && pnpm run lint
       stage_fixed: true
 
 pre-push:
